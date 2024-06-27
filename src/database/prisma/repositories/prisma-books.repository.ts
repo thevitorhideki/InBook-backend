@@ -23,12 +23,10 @@ export class PrismaBooksRepository implements BooksRepository {
     return PrismaBookMapper.toEntity(book);
   }
 
-  async findByAuthor(authorName: string): Promise<Book[]> {
+  async findByAuthorId(authorId: number): Promise<Book[]> {
     const books = await this.prisma.book.findMany({
       where: {
-        author: {
-          name: authorName,
-        },
+        authorId,
       },
     });
 
