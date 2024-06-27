@@ -7,52 +7,95 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id        Int                   @id @default(autoincrement())
+  username  String                @unique
+  email     String                @unique
+  password  String
+  createdAt DateTime              @default(now())
+  updatedAt DateTime              @updatedAt
+  profile   Profile?
+  books     UserBookInteraction[]
+}
+
+model Profile {
+  id        Int     @id @default(autoincrement())
+  firstName String
+  lastName  String
+  avatarUrl String?
+  userId    Int     @unique
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
 model Book {
-  id               Int         @id @default(autoincrement())
+  id               Int                   @id @default(autoincrement())
   title            String
   description      String
-  isbn             String      @unique
+  genres           Genre[]
+  language         Language
+  isbn             String                @unique
   pages            Int
   duration         Int
   publicationYear  Int?
   coverImageUrl    String?
   ebookFileUrl     String?
   audiobookFileUrl String?
-  createdAt        DateTime    @default(now())
-  updatedAt        DateTime    @updatedAt
   authorId         Int
-  languageId       Int
-  author           Author      @relation(fields: [authorId], references: [id])
-  language         Language    @relation(fields: [languageId], references: [id])
-  genres           BookGenre[]
+  createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @updatedAt
+  author           Author                @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  interactions     UserBookInteraction[]
 }
 
 model Author {
   id          Int     @id @default(autoincrement())
   name        String
+  avatarUrl   String?
   about       String?
   birthYear   Int?
   nationality String?
   books       Book[]
 }
 
-model Genre {
-  id    Int         @id @default(autoincrement())
-  name  String      @unique
-  books BookGenre[]
+model UserBookInteraction {
+  id              Int             @id @default(autoincrement())
+  userId          Int
+  bookId          Int
+  interactionType InteractionType
+  book            Book            @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, bookId, interactionType])
+  @@index([userId])
+  @@index([bookId])
 }
 
-model Language {
-  id    Int    @id @default(autoincrement())
-  name  String @unique
-  books Book[]
+enum Language {
+  PORTUGUESE
+  ENGLISH
 }
 
-model BookGenre {
-  bookId  Int
-  genreId Int
-  book    Book  @relation(fields: [bookId], references: [id])
-  genre   Genre @relation(fields: [genreId], references: [id])
+enum Genre {
+  ROMANCE
+  FANFIC
+  BUSINESS
+  ADVENTURE
+  HORROR
+  RELIGION
+  HISTORY
+  SELF_HELP
+  CLASSIC
+  BIOGRAPHY
+}
 
-  @@id([bookId, genreId])
+enum Role {
+  USER
+  ADMIN
+}
+
+enum InteractionType {
+  SAVED
+  DOWNLOADED
+  READING
+  READ
 }
