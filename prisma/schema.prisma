@@ -34,7 +34,6 @@ model Book {
   description      String
   genres           Genre[]
   language         Language
-  isbn             String                @unique
   pages            Int
   duration         Int
   publicationYear  Int?
