@@ -15,6 +15,7 @@ model User {
   createdAt DateTime              @default(now())
   updatedAt DateTime              @updatedAt
   profile   Profile?
+  reviews   Review[]
   books     UserBookInteraction[]
 }
 
@@ -44,6 +45,7 @@ model Book {
   createdAt        DateTime              @default(now())
   updatedAt        DateTime              @updatedAt
   author           Author                @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  reviews          Review[]
   interactions     UserBookInteraction[]
 }
 
@@ -55,6 +57,21 @@ model Author {
   birthYear   Int?
   nationality String?
   books       Book[]
+}
+
+model Review {
+  id              Int      @id @default(autoincrement())
+  userId          Int
+  bookId          Int
+  recommended     Boolean
+  enjoyedContent  Boolean
+  enjoyedNarrator Boolean
+  title           String?
+  content         String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  book            Book     @relation(fields: [bookId], references: [id])
+  user            User     @relation(fields: [userId], references: [id])
 }
 
 model UserBookInteraction {
