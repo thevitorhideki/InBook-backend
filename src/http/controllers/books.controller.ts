@@ -6,8 +6,8 @@ import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { BookViewModel } from '../view-models/book-view-model';
 
+@ApiTags('Books')
 @Controller('books')
-@ApiTags('books')
 export class BooksController {
   constructor(
     private createBook: CreateBook,
