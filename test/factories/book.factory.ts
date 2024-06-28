@@ -18,6 +18,6 @@ export function makeBook(override: Override = {}) {
       authorId: 1,
       ...override,
     },
-    1,
+    9999,
   );
 }
