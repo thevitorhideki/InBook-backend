@@ -15,7 +15,7 @@ export function makeBook(override: Override = {}) {
       coverImageUrl: 'https://example.com/cover1.jpg',
       ebookFileUrl: 'https://example.com/ebook1.pdf',
       audiobookFileUrl: 'https://example.com/audiobook1.mp3',
-      authorId: 1,
+      authorId: 9999,
       ...override,
     },
     9999,

@@ -7,6 +7,6 @@ export abstract class BooksRepository {
   abstract findByGenre(genre: Genre): Promise<Book[] | null>;
   abstract findByLanguage(language: Language): Promise<Book[] | null>;
   abstract create(bookData: Book): Promise<void>;
-  abstract update(id: number, data: Book): Promise<void>;
+  abstract update(id: number, bookData: Partial<Book>): Promise<void>;
   abstract delete(id: number): Promise<void>;
 }

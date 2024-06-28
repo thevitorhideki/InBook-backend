@@ -16,10 +16,6 @@ export class PrismaBooksRepository implements BooksRepository {
       },
     });
 
-    if (!book) {
-      return null;
-    }
-
     return PrismaBookMapper.toEntity(book);
   }
 
@@ -70,31 +66,13 @@ export class PrismaBooksRepository implements BooksRepository {
   async create(bookData: Book): Promise<void> {
     const raw = PrismaBookMapper.toPrisma(bookData);
 
-    const author = await this.prisma.author.findUnique({
-      where: {
-        id: bookData.authorId,
-      },
-    });
-
-    if (!author) {
-      return null;
-    }
-
     await this.prisma.book.create({
       data: raw,
     });
   }
 
-  async update(id: number, data: Book): Promise<void> {
-    const book = await this.prisma.book.findUnique({
-      where: { id },
-    });
-
-    if (!book) {
-      return null;
-    }
-
-    const raw = PrismaBookMapper.toPrisma(data);
+  async update(id: number, bookData: Partial<Book>): Promise<void> {
+    const raw = PrismaBookMapper.toPrisma(bookData);
 
     await this.prisma.book.update({
       where: { id },

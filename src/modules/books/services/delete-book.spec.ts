@@ -1,8 +1,8 @@
 import { Book } from '@/entities/book';
+import { NotFoundException } from '@nestjs/common';
 import { makeBook } from '@test/factories/book.factory';
 import { InMemoryBooksRepository } from '@test/repositories/in-memory-books.repository';
 import { DeleteBook } from './delete-book.service';
-import { NotFoundException } from '@nestjs/common';
 
 describe('Remove BOok', () => {
   let book: Book;

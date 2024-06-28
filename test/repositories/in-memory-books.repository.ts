@@ -49,11 +49,11 @@ export class InMemoryBooksRepository implements BooksRepository {
     this.books.push(bookData);
   }
 
-  async update(id: number, data: Book): Promise<void> {
+  async update(id: number, bookData: Book): Promise<void> {
     const bookIndex = this.books.findIndex((book) => book.id === id);
 
     if (bookIndex >= 0) {
-      this.books[bookIndex] = data;
+      this.books[bookIndex] = bookData;
     }
   }
 
