@@ -6,10 +6,11 @@ import { GetBookById } from '@/modules/books/services/get-book-by-id.service';
 import { Module } from '@nestjs/common';
 import { AuthorsController } from './controllers/authors.controller';
 import { BooksController } from './controllers/books.controller';
+import { GetAuthorById } from '@/modules/authors/services/get-author-by-id.service';
 
 @Module({
   imports: [DatabaseModule],
   controllers: [BooksController, AuthorsController],
-  providers: [CreateBook, DeleteBook, GetBookById, CreateAuthor],
+  providers: [CreateBook, DeleteBook, GetBookById, CreateAuthor, GetAuthorById],
 })
 export class HttpModule {}

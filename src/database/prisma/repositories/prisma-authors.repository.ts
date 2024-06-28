@@ -15,7 +15,15 @@ export class PrismaAuthorsRepository implements AuthorsRepository {
   }
 
   async getAuthorById(authorId: number): Promise<Author> {
-    throw new Error('Method not implemented.');
+    const author = await this.prisma.author.findUnique({
+      where: { id: authorId },
+    });
+
+    if (!author) {
+      return null;
+    }
+
+    return PrismaAuthorMapper.toEntity(author);
   }
 
   async updateAuthor(authorId: number, author: Author): Promise<void> {

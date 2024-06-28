@@ -19,7 +19,7 @@ export class CreateBookDto {
   @IsNotEmpty()
   description: string;
 
-  @ApiProperty({ required: true, enum: Genre })
+  @ApiProperty({ type: [Genre], required: true, enum: Genre })
   @IsNotEmpty()
   @IsEnum(Genre, { each: true, message: 'Invalid genre' })
   genres: Genre[];
