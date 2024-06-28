@@ -1,9 +1,10 @@
 import { CreateAuthorDto } from '@/modules/authors/dto/create-author.dto';
 import { CreateAuthor } from '@/modules/authors/services/create-author.service';
 import { GetAuthorById } from '@/modules/authors/services/get-author-by-id.service';
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthorViewModel } from '../view-models/author-view-model';
+import { DeleteAuthor } from '@/modules/authors/services/delete-author.service';
 
 @ApiTags('Authors')
 @Controller('authors')
@@ -11,10 +12,11 @@ export class AuthorsController {
   constructor(
     private createAuthor: CreateAuthor,
     private getAuthorById: GetAuthorById,
+    private deleteAuthor: DeleteAuthor,
   ) {}
 
   @Get(':id')
-  @ApiOperation({ summary: 'Get author by id' })
+  @ApiOperation({ summary: 'Get an author by id' })
   @ApiResponse({
     status: 200,
     description: 'The author has been successfully retrieved',
@@ -41,5 +43,19 @@ export class AuthorsController {
   })
   async create(@Body() body: CreateAuthorDto) {
     await this.createAuthor.execute(body);
+  }
+
+  @Delete(':id')
+  @ApiOperation({ summary: 'Delete an author by id' })
+  @ApiResponse({
+    status: 200,
+    description: 'The author has been successfully deleted',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Author not found',
+  })
+  async delete(@Param('id') id: string) {
+    await this.deleteAuthor.execute({ authorId: parseInt(id) });
   }
 }

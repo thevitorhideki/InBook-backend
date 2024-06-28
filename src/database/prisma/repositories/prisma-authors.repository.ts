@@ -31,6 +31,6 @@ export class PrismaAuthorsRepository implements AuthorsRepository {
   }
 
   async deleteAuthor(authorId: number): Promise<void> {
-    throw new Error('Method not implemented.');
+    await this.prisma.author.delete({ where: { id: authorId } });
   }
 }
