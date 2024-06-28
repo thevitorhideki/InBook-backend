@@ -20,6 +20,6 @@ export class DeleteBook {
       throw new NotFoundException('Book not found');
     }
 
-    await this.booksRepository.delete(request.bookId);
+    await this.booksRepository.delete(bookId);
   }
 }

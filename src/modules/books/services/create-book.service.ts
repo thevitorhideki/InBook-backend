@@ -1,7 +1,8 @@
 import { Book } from '@/entities/book';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Genre, Language } from '@prisma/client';
 import { BooksRepository } from '../books.repository';
+import { AuthorsRepository } from '@/modules/authors/authors-repository';
 
 interface ICreateBookRequest {
   title: string;
@@ -23,11 +24,20 @@ interface ISendNotificationResponse {
 
 @Injectable()
 export class CreateBook {
-  constructor(private booksRepository: BooksRepository) {}
+  constructor(
+    private booksRepository: BooksRepository,
+    private authorsRepository: AuthorsRepository,
+  ) {}
 
   async execute(
     request: ICreateBookRequest,
   ): Promise<ISendNotificationResponse> {
+    const author = await this.authorsRepository.getAuthorById(request.authorId);
+
+    if (!author) {
+      throw new NotFoundException('Author not found');
+    }
+
     const book = new Book({
       title: request.title,
       description: request.description,

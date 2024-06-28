@@ -1,8 +1,18 @@
 import { CreateBookDto } from '@/modules/books/dto/create-book.dto';
+import { UpdateBookDto } from '@/modules/books/dto/update-book.dto';
 import { CreateBook } from '@/modules/books/services/create-book.service';
 import { DeleteBook } from '@/modules/books/services/delete-book.service';
 import { GetBookById } from '@/modules/books/services/get-book-by-id.service';
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { UpdateBook } from '@/modules/books/services/update-book.service';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { BookViewModel } from '../view-models/book-view-model';
 
@@ -13,6 +23,7 @@ export class BooksController {
     private createBook: CreateBook,
     private deleteBook: DeleteBook,
     private getBookById: GetBookById,
+    private updateBook: UpdateBook,
   ) {}
 
   @Get(':id')
@@ -43,6 +54,24 @@ export class BooksController {
   })
   async create(@Body() body: CreateBookDto) {
     await this.createBook.execute(body);
+  }
+
+  @Put(':id')
+  @ApiOperation({ summary: 'Update a book by ID' })
+  @ApiResponse({
+    status: 200,
+    description: 'The book has been successfully updated',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad request. Invalid data provided',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'The book was not found',
+  })
+  async update(@Param('id') id: string, @Body() body: UpdateBookDto) {
+    await this.updateBook.execute({ bookId: parseInt(id), bookData: body });
   }
 
   @Delete(':id')
