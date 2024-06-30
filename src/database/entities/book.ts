@@ -1,5 +1,7 @@
 import { Replace } from '@/helpers/Replace';
-import { Genre, Language } from '@prisma/client';
+import { Genre } from '../enums/genre';
+import { Language } from '../enums/language';
+import { Author } from './author';
 import { Review } from './review';
 import { UserBookInteraction } from './user-book-interaction';
 
@@ -15,28 +17,39 @@ export interface IBookProps {
   ebookFileUrl?: string | null;
   audiobookFileUrl?: string | null;
   authorId: number;
-  reviews?: Review[] | null;
-  interactions?: UserBookInteraction[] | null;
+  author: Author;
+  reviews: Review[];
+  interactions: UserBookInteraction[];
 
   createdAt: Date;
   updatedAt?: Date | null;
 }
 
 export class Book {
-  private _id: number;
+  private _id: number | undefined;
   private props: IBookProps;
 
-  constructor(props: Replace<IBookProps, { createdAt?: Date }>, id?: number) {
+  constructor(
+    props: Replace<
+      IBookProps,
+      {
+        reviews?: Review[];
+        interactions?: UserBookInteraction[];
+        createdAt?: Date;
+      }
+    >,
+    id?: number,
+  ) {
     this.props = {
       ...props,
+      reviews: props.reviews ?? [],
+      interactions: props.interactions ?? [],
       createdAt: props.createdAt ?? new Date(),
-      reviews: [],
-      interactions: [],
     };
     this._id = id;
   }
 
-  public get id(): number {
+  public get id(): number | undefined {
     return this._id;
   }
 
@@ -64,24 +77,28 @@ export class Book {
     return this.props.duration;
   }
 
-  public get publicationYear(): number | null {
+  public get publicationYear(): number | null | undefined {
     return this.props.publicationYear;
   }
 
-  public get coverImageUrl(): string | null {
+  public get coverImageUrl(): string | null | undefined {
     return this.props.coverImageUrl;
   }
 
-  public get ebookFileUrl(): string | null {
+  public get ebookFileUrl(): string | null | undefined {
     return this.props.ebookFileUrl;
   }
 
-  public get audiobookFileUrl(): string | null {
+  public get audiobookFileUrl(): string | null | undefined {
     return this.props.audiobookFileUrl;
   }
 
   public get authorId(): number {
     return this.props.authorId;
+  }
+
+  public get author(): Author {
+    return this.props.author;
   }
 
   public get reviews(): Review[] {
@@ -146,5 +163,9 @@ export class Book {
 
   public set authorId(authorId: number) {
     this.props.authorId = authorId;
+  }
+
+  public set updatedAt(updatedAt: Date | null) {
+    this.props.updatedAt = updatedAt;
   }
 }

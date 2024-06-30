@@ -1,42 +1,22 @@
-import { Book } from '@/entities/book';
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { Genre, Language } from '@prisma/client';
+import { Book } from '@/database/entities/book';
+import { AuthorsRepository } from '@/modules/authors/authors.repository';
+import { Injectable } from '@nestjs/common';
 import { BooksRepository } from '../books.repository';
-import { AuthorsRepository } from '@/modules/authors/authors-repository';
+import { CreateBookDto } from '../dto/create-book.dto';
 
-interface ICreateBookRequest {
-  title: string;
-  description: string;
-  genres: Genre[];
-  language: Language;
-  pages: number;
-  duration: number;
-  publicationYear?: number | null;
-  coverImageUrl?: string | null;
-  ebookFileUrl?: string | null;
-  audiobookFileUrl?: string | null;
-  authorId: number;
-}
-
-interface ISendNotificationResponse {
+interface ISendBookResponse {
   book: Book;
 }
 
 @Injectable()
 export class CreateBook {
   constructor(
-    private booksRepository: BooksRepository,
-    private authorsRepository: AuthorsRepository,
+    private readonly booksRepository: BooksRepository,
+    private readonly authorsRepository: AuthorsRepository,
   ) {}
 
-  async execute(
-    request: ICreateBookRequest,
-  ): Promise<ISendNotificationResponse> {
+  async execute(request: CreateBookDto): Promise<ISendBookResponse> {
     const author = await this.authorsRepository.getAuthorById(request.authorId);
-
-    if (!author) {
-      throw new NotFoundException('Author not found');
-    }
 
     const book = new Book({
       title: request.title,
@@ -50,9 +30,12 @@ export class CreateBook {
       ebookFileUrl: request.ebookFileUrl,
       audiobookFileUrl: request.audiobookFileUrl,
       authorId: request.authorId,
+      author: author,
+      reviews: [],
+      interactions: [],
     });
 
-    await this.booksRepository.create(book);
+    await this.booksRepository.createBook(book);
 
     return { book };
   }

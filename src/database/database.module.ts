@@ -1,4 +1,4 @@
-import { AuthorsRepository } from '@/modules/authors/authors-repository';
+import { AuthorsRepository } from '@/modules/authors/authors.repository';
 import { BooksRepository } from '@/modules/books/books.repository';
 import { Module } from '@nestjs/common';
 import { PrismaService } from './prisma/prisma.service';

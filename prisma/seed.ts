@@ -1,6 +1,5 @@
-// prisma/seed.js
-
 import { PrismaClient } from '@prisma/client';
+
 const prisma = new PrismaClient();
 
 async function main() {
@@ -90,6 +89,43 @@ async function main() {
           avatarUrl: 'https://example.com/avatar4.jpg',
         },
       },
+    },
+  });
+
+  // Criação de Reviews
+  await prisma.review.create({
+    data: {
+      userId: user1.id,
+      bookId: book1.id,
+      recommended: true,
+      enjoyedContent: true,
+      enjoyedNarrator: false,
+      title: 'Great Book!',
+      content: 'I really enjoyed reading this book. Highly recommended!',
+    },
+  });
+
+  await prisma.review.create({
+    data: {
+      userId: user2.id,
+      bookId: book1.id,
+      recommended: false,
+      enjoyedContent: false,
+      enjoyedNarrator: true,
+      title: 'Not my type',
+      content: 'I did not enjoy the book as much as I thought I would.',
+    },
+  });
+
+  await prisma.review.create({
+    data: {
+      userId: user1.id,
+      bookId: book2.id,
+      recommended: true,
+      enjoyedContent: true,
+      enjoyedNarrator: true,
+      title: 'Excellent Read!',
+      content: 'This book is a masterpiece. The narration was top-notch.',
     },
   });
 

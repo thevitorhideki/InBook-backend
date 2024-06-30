@@ -1,18 +1,18 @@
 import { CreateAuthorDto } from '@/modules/authors/dto/create-author.dto';
 import { CreateAuthor } from '@/modules/authors/services/create-author.service';
+import { DeleteAuthor } from '@/modules/authors/services/delete-author.service';
 import { GetAuthorById } from '@/modules/authors/services/get-author-by-id.service';
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { AuthorViewModel } from '../view-models/author-view-model';
-import { DeleteAuthor } from '@/modules/authors/services/delete-author.service';
+import { AuthorDetailsDto } from './dto/author-details';
 
 @ApiTags('Authors')
 @Controller('authors')
 export class AuthorsController {
   constructor(
-    private createAuthor: CreateAuthor,
-    private getAuthorById: GetAuthorById,
-    private deleteAuthor: DeleteAuthor,
+    private readonly createAuthor: CreateAuthor,
+    private readonly getAuthorById: GetAuthorById,
+    private readonly deleteAuthor: DeleteAuthor,
   ) {}
 
   @Get(':id')
@@ -25,10 +25,10 @@ export class AuthorsController {
     status: 404,
     description: 'Author not found',
   })
-  async getById(@Param('id') id: string) {
+  async getById(@Param('id') id: string): Promise<AuthorDetailsDto> {
     const author = await this.getAuthorById.execute({ authorId: parseInt(id) });
 
-    return AuthorViewModel.toHTTP(author);
+    return AuthorDetailsDto.fromEntity(author);
   }
 
   @Post()

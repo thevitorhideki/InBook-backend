@@ -1,67 +1,47 @@
-import { Book } from '@/entities/book';
+import { Book } from '@/database/entities/book';
+import { Genre } from '@/database/enums/genre';
+import { Language } from '@/database/enums/language';
 import { BooksRepository } from '@/modules/books/books.repository';
-import { Genre, Language } from '@prisma/client';
+import { NotFoundException } from '@nestjs/common';
 
 export class InMemoryBooksRepository implements BooksRepository {
   private books: Book[] = [];
 
-  async findById(id: number): Promise<Book | null> {
+  async getBookById(id: number): Promise<Book | null> {
     const book = this.books.find((book) => book.id === id);
 
-    if (!book) {
-      return null;
-    }
-
-    return book;
+    return book || null;
   }
 
-  async findByAuthorId(authorId: number): Promise<Book[]> {
-    const books = this.books.find((book) => book.authorId === authorId);
-
-    if (!books) {
-      return [];
-    }
-
-    return [books];
+  async getBooksByGenre(genre: string): Promise<Book[]> {
+    return this.books.filter((book) => book.genres.includes(Genre[genre]));
   }
 
-  async findByGenre(genre: string): Promise<Book[]> {
-    const books = this.books.find((book) => book.genres.includes(Genre[genre]));
-
-    if (!books) {
-      return [];
-    }
-
-    return [books];
+  async getBooksByLanguage(language: Language): Promise<Book[]> {
+    return this.books.filter((book) => book.language === language);
   }
 
-  async findByLanguage(language: Language): Promise<Book[]> {
-    const books = this.books.find((book) => book.language === language);
-
-    if (!books) {
-      return [];
-    }
-
-    return [books];
-  }
-
-  async create(bookData: Book): Promise<void> {
+  async createBook(bookData: Book): Promise<void> {
     this.books.push(bookData);
   }
 
-  async update(id: number, bookData: Book): Promise<void> {
+  async updateBook(id: number, bookData: Book): Promise<void> {
     const bookIndex = this.books.findIndex((book) => book.id === id);
 
-    if (bookIndex >= 0) {
-      this.books[bookIndex] = bookData;
+    if (bookIndex === -1) {
+      throw new NotFoundException(`Book with id ${id} not found`);
     }
+
+    this.books[bookIndex] = bookData;
   }
 
-  async delete(id: number): Promise<void> {
+  async deleteBook(id: number): Promise<void> {
     const bookIndex = this.books.findIndex((book) => book.id === id);
 
-    if (bookIndex >= 0) {
-      this.books.splice(bookIndex, 1);
+    if (bookIndex === -1) {
+      throw new NotFoundException(`Book with id ${id} not found`);
     }
+
+    this.books.splice(bookIndex, 1);
   }
 }

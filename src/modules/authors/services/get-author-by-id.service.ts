@@ -1,16 +1,15 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { AuthorsRepository } from '../authors-repository';
-import { Author } from '@/entities/author';
+import { Injectable } from '@nestjs/common';
+import { AuthorsRepository } from '../authors.repository';
 
 interface IGetAuthorByIdRequest {
   authorId: number;
 }
 
-type IGetAuthorByIdResponse = Author;
+type IGetAuthorByIdResponse = any;
 
 @Injectable()
 export class GetAuthorById {
-  constructor(private authorsRepository: AuthorsRepository) {}
+  constructor(private readonly authorsRepository: AuthorsRepository) {}
 
   async execute(
     request: IGetAuthorByIdRequest,
@@ -18,10 +17,6 @@ export class GetAuthorById {
     const { authorId } = request;
 
     const author = await this.authorsRepository.getAuthorById(authorId);
-
-    if (!author) {
-      throw new NotFoundException('Author not found');
-    }
 
     return author;
   }
