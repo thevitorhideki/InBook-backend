@@ -69,6 +69,24 @@ export class PrismaBooksRepository implements BooksRepository {
   }
 
   async updateBook(id: number, bookData: Book): Promise<void> {
+    const book = await this.prisma.book.findUnique({ where: { id } });
+
+    if (!book) {
+      throw new NotFoundException('Book not found');
+    }
+
+    if (!bookData.authorId) {
+      bookData.authorId = book.authorId;
+    } else {
+      const author = await this.prisma.author.findUnique({
+        where: { id: bookData.authorId },
+      });
+
+      if (!author) {
+        throw new NotFoundException('Author not found');
+      }
+    }
+
     const raw = PrismaBookMapper.toPrisma(bookData);
 
     await this.prisma.book.update({

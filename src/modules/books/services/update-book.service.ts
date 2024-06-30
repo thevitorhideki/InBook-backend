@@ -16,12 +16,6 @@ export class UpdateBook {
   async execute(request: IUpdateBookRequest): Promise<IUpdateBookResponse> {
     const { bookId, bookData } = request;
 
-    const existingBook = await this.booksRepository.getBookById(bookId);
-
-    if (!bookData.authorId) {
-      bookData.authorId = existingBook.authorId;
-    }
-
     await this.booksRepository.updateBook(bookId, bookData);
   }
 }
