@@ -30,11 +30,11 @@ export class PrismaAuthorsRepository implements AuthorsRepository {
   }
 
   async updateAuthor(authorId: number, authorData: Author): Promise<void> {
-    const book = await this.prisma.author.findUnique({
+    const author = await this.prisma.author.findUnique({
       where: { id: authorId },
     });
 
-    if (!book) {
+    if (!author) {
       throw new NotFoundException('Author not found');
     }
 

@@ -1,10 +1,20 @@
-import { CreateAuthorDto } from '@/modules/authors/dto/create-author.dto';
-import { CreateAuthor } from '@/modules/authors/services/create-author.service';
-import { DeleteAuthor } from '@/modules/authors/services/delete-author.service';
-import { GetAuthorById } from '@/modules/authors/services/get-author-by-id.service';
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthorDetailsDto } from './dto/author-details';
+import { CreateAuthorDto } from './dto/create-author.dto';
+import { UpdateAuthorDto } from './dto/update-author.dto';
+import { CreateAuthor } from './services/create-author.service';
+import { DeleteAuthor } from './services/delete-author.service';
+import { GetAuthorById } from './services/get-author-by-id.service';
+import { UpdateAuthor } from './services/update-author.service';
 
 @ApiTags('Authors')
 @Controller('authors')
@@ -13,6 +23,7 @@ export class AuthorsController {
     private readonly createAuthor: CreateAuthor,
     private readonly getAuthorById: GetAuthorById,
     private readonly deleteAuthor: DeleteAuthor,
+    private readonly updateAuthor: UpdateAuthor,
   ) {}
 
   @Get(':id')
@@ -43,6 +54,23 @@ export class AuthorsController {
   })
   async create(@Body() body: CreateAuthorDto) {
     await this.createAuthor.execute(body);
+  }
+
+  @Put(':id')
+  @ApiOperation({ summary: 'Update an author by id' })
+  @ApiResponse({
+    status: 200,
+    description: 'The author has been successfully updated',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Author not found',
+  })
+  async update(@Param('id') id: string, @Body() body: UpdateAuthorDto) {
+    await this.updateAuthor.execute({
+      authorId: parseInt(id),
+      authorData: body,
+    });
   }
 
   @Delete(':id')
