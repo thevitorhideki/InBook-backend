@@ -1,15 +1,10 @@
-import { Author } from '@/database/entities/author';
 import { Book, IBookProps } from '@/database/entities/book';
 import { Genre } from '@/database/enums/genre';
 import { Language } from '@/database/enums/language';
-import { makeAuthor } from './author.factory';
 
 type Override = Partial<IBookProps>;
 
-export function makeBook(
-  override: Override = {},
-  author: Author = makeAuthor(),
-) {
+export function makeBook(override: Override = {}) {
   return new Book(
     {
       title: "Harry Potter and the Philosopher's Stone",
@@ -23,7 +18,6 @@ export function makeBook(
       ebookFileUrl: 'https://example.com/ebook1.pdf',
       audiobookFileUrl: 'https://example.com/audiobook1.mp3',
       authorId: 9999,
-      author,
       ...override,
     },
     9999,

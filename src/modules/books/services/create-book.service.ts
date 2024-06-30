@@ -1,5 +1,4 @@
 import { Book } from '@/database/entities/book';
-import { AuthorsRepository } from '@/modules/authors/authors.repository';
 import { Injectable } from '@nestjs/common';
 import { BooksRepository } from '../books.repository';
 import { CreateBookDto } from '../dto/create-book.dto';
@@ -10,14 +9,9 @@ interface ISendBookResponse {
 
 @Injectable()
 export class CreateBook {
-  constructor(
-    private readonly booksRepository: BooksRepository,
-    private readonly authorsRepository: AuthorsRepository,
-  ) {}
+  constructor(private readonly booksRepository: BooksRepository) {}
 
   async execute(request: CreateBookDto): Promise<ISendBookResponse> {
-    const author = await this.authorsRepository.getAuthorById(request.authorId);
-
     const book = new Book({
       title: request.title,
       description: request.description,
@@ -30,9 +24,6 @@ export class CreateBook {
       ebookFileUrl: request.ebookFileUrl,
       audiobookFileUrl: request.audiobookFileUrl,
       authorId: request.authorId,
-      author: author,
-      reviews: [],
-      interactions: [],
     });
 
     await this.booksRepository.createBook(book);

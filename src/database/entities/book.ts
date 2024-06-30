@@ -33,6 +33,7 @@ export class Book {
     props: Replace<
       IBookProps,
       {
+        author?: Author;
         reviews?: Review[];
         interactions?: UserBookInteraction[];
         createdAt?: Date;
@@ -42,6 +43,7 @@ export class Book {
   ) {
     this.props = {
       ...props,
+      author: props.author ?? null,
       reviews: props.reviews ?? [],
       interactions: props.interactions ?? [],
       createdAt: props.createdAt ?? new Date(),

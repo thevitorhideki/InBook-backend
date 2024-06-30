@@ -51,6 +51,14 @@ export class PrismaBooksRepository implements BooksRepository {
   }
 
   async createBook(bookData: Book): Promise<void> {
+    const author = await this.prisma.author.findUnique({
+      where: { id: bookData.authorId },
+    });
+
+    if (!author) {
+      throw new NotFoundException('Author not found');
+    }
+
     const raw = PrismaBookMapper.toPrisma(bookData);
 
     await this.prisma.book.create({
