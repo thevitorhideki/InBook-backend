@@ -1,4 +1,4 @@
-import { Author, IAuthorProps } from '@/entities/author';
+import { Author, IAuthorProps } from '@/database/entities/author';
 
 type Override = Partial<IAuthorProps>;
 

@@ -1,13 +1,16 @@
+import { Book } from './book';
+
 export interface IAuthorProps {
   name: string;
   avatarUrl?: string | null;
   about?: string | null;
   birthYear?: number | null;
   nationality?: string | null;
+  books?: Book[];
 }
 
 export class Author {
-  private _id: number;
+  private _id: number | undefined;
   private props: IAuthorProps;
 
   constructor(props: IAuthorProps, id?: number) {
@@ -17,7 +20,7 @@ export class Author {
     this._id = id;
   }
 
-  public get id(): number {
+  public get id(): number | undefined {
     return this._id;
   }
 
@@ -39,6 +42,10 @@ export class Author {
 
   public get nationality(): string | null {
     return this.props.nationality;
+  }
+
+  public get books(): Book[] {
+    return this.props.books;
   }
 
   public set name(name: string) {

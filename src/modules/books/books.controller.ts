@@ -13,17 +13,22 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { BookViewModel } from '../view-models/book-view-model';
+import {
+  ApiOperation,
+  ApiResponse,
+  ApiResponseProperty,
+  ApiTags,
+} from '@nestjs/swagger';
+import { BookDetailsDto } from './dto/book-details.dto';
 
 @ApiTags('Books')
 @Controller('books')
 export class BooksController {
   constructor(
-    private createBook: CreateBook,
-    private deleteBook: DeleteBook,
-    private getBookById: GetBookById,
-    private updateBook: UpdateBook,
+    private readonly createBook: CreateBook,
+    private readonly deleteBook: DeleteBook,
+    private readonly getBookById: GetBookById,
+    private readonly updateBook: UpdateBook,
   ) {}
 
   @Get(':id')
@@ -36,10 +41,9 @@ export class BooksController {
     status: 404,
     description: 'The book was not found',
   })
-  async getById(@Param('id') id: string) {
-    const book = await this.getBookById.execute({ bookId: parseInt(id) });
-
-    return { book: BookViewModel.toHTTP(book) };
+  @ApiResponseProperty({ type: BookDetailsDto })
+  async getById(@Param('id') id: string): Promise<BookDetailsDto> {
+    return await this.getBookById.execute({ bookId: parseInt(id) });
   }
 
   @Post()
@@ -61,10 +65,6 @@ export class BooksController {
   @ApiResponse({
     status: 200,
     description: 'The book has been successfully updated',
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Bad request. Invalid data provided',
   })
   @ApiResponse({
     status: 404,

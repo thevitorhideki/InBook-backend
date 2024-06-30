@@ -1,6 +1,6 @@
-import { Author } from '@/entities/author';
+import { Author } from '@/database/entities/author';
 import { Injectable } from '@nestjs/common';
-import { AuthorsRepository } from '../authors-repository';
+import { AuthorsRepository } from '../authors.repository';
 
 interface ICreateAuthorRequest {
   name: string;
@@ -16,7 +16,7 @@ interface ICreateAuthorResponse {
 
 @Injectable()
 export class CreateAuthor {
-  constructor(private authorsRepository: AuthorsRepository) {}
+  constructor(private readonly authorsRepository: AuthorsRepository) {}
 
   async execute(request: ICreateAuthorRequest): Promise<ICreateAuthorResponse> {
     const author = new Author({

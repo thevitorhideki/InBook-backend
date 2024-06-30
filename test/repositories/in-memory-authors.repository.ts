@@ -1,5 +1,6 @@
-import { Author } from '@/entities/author';
-import { AuthorsRepository } from '@/modules/authors/authors-repository';
+import { Author } from '@/database/entities/author';
+import { AuthorsRepository } from '@/modules/authors/authors.repository';
+import { NotFoundException } from '@nestjs/common';
 
 export class InMemoryAuthorsRepository implements AuthorsRepository {
   private authors: Author[] = [];
@@ -8,21 +9,19 @@ export class InMemoryAuthorsRepository implements AuthorsRepository {
     this.authors.push(authorData);
   }
 
-  async getAuthorById(authorId: number): Promise<Author> {
+  async getAuthorById(authorId: number): Promise<Author | null> {
     const author = this.authors.find((author) => author.id === authorId);
 
-    if (!author) {
-      return null;
-    }
-
-    return author;
+    return author || null;
   }
 
   async updateAuthor(authorId: number, authorData: Author): Promise<void> {
-    const author = this.authors.find((author) => author.id === authorId);
+    const authorIndex = this.authors.findIndex(
+      (author) => author.id === authorId,
+    );
 
-    if (!author) {
-      return null;
+    if (authorIndex === -1) {
+      throw new NotFoundException('Author not found');
     }
 
     this.authors[authorId] = authorData;
@@ -33,8 +32,10 @@ export class InMemoryAuthorsRepository implements AuthorsRepository {
       (author) => author.id === authorId,
     );
 
-    if (authorIndex >= 0) {
-      this.authors.splice(authorIndex, 1);
+    if (authorIndex === -1) {
+      throw new NotFoundException('Author not found');
     }
+
+    this.authors.splice(authorIndex, 1);
   }
 }

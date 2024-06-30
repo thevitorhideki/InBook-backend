@@ -1,39 +1,41 @@
-import { Injectable } from '@nestjs/common';
-import { Genre, Language } from '@prisma/client';
-import { Book } from 'src/entities/book';
-import { BooksRepository } from 'src/modules/books/books.repository';
+import { Book } from '@/database/entities/book';
+import { Genre } from '@/database/enums/genre';
+import { Language } from '@/database/enums/language';
+import { BooksRepository } from '@/modules/books/books.repository';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaBookMapper } from '../mappers/prisma-book.mapper';
 import { PrismaService } from '../prisma.service';
 
 @Injectable()
 export class PrismaBooksRepository implements BooksRepository {
-  constructor(private prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) {}
 
-  async findById(id: number): Promise<Book> {
+  async getBookById(id: number): Promise<Book> {
     const book = await this.prisma.book.findUnique({
-      where: {
-        id,
+      where: { id },
+      include: {
+        author: true,
+        reviews: {
+          include: {
+            user: {
+              include: {
+                profile: true,
+              },
+            },
+          },
+        },
+        interactions: true,
       },
     });
+
+    if (!book) {
+      throw new NotFoundException('Book not found');
+    }
 
     return PrismaBookMapper.toEntity(book);
   }
 
-  async findByAuthorId(authorId: number): Promise<Book[]> {
-    const books = await this.prisma.book.findMany({
-      where: {
-        authorId,
-      },
-    });
-
-    if (!books) {
-      return null;
-    }
-
-    return books.map((book) => PrismaBookMapper.toEntity(book));
-  }
-
-  async findByGenre(genre: Genre): Promise<Book[]> {
+  async getBooksByGenre(genre: Genre): Promise<Book[]> {
     const books = await this.prisma.book.findMany({
       where: {
         genres: {
@@ -42,28 +44,23 @@ export class PrismaBooksRepository implements BooksRepository {
       },
     });
 
-    if (!books) {
-      return null;
-    }
-
-    return books.map((book) => PrismaBookMapper.toEntity(book));
+    return books.map(PrismaBookMapper.toEntity);
   }
 
-  async findByLanguage(language: Language): Promise<Book[]> {
+  async getBooksByLanguage(language: Language): Promise<any[]> {
     const books = await this.prisma.book.findMany({
       where: {
         language,
       },
+      include: {
+        reviews: true,
+      },
     });
 
-    if (!books) {
-      return null;
-    }
-
-    return books.map((book) => PrismaBookMapper.toEntity(book));
+    return books;
   }
 
-  async create(bookData: Book): Promise<void> {
+  async createBook(bookData: Book): Promise<void> {
     const raw = PrismaBookMapper.toPrisma(bookData);
 
     await this.prisma.book.create({
@@ -71,7 +68,7 @@ export class PrismaBooksRepository implements BooksRepository {
     });
   }
 
-  async update(id: number, bookData: Partial<Book>): Promise<void> {
+  async updateBook(id: number, bookData: Book): Promise<void> {
     const raw = PrismaBookMapper.toPrisma(bookData);
 
     await this.prisma.book.update({
@@ -80,11 +77,15 @@ export class PrismaBooksRepository implements BooksRepository {
     });
   }
 
-  async delete(id: number): Promise<void> {
+  async deleteBook(id: number): Promise<void> {
+    const book = await this.prisma.book.findUnique({ where: { id } });
+
+    if (!book) {
+      throw new NotFoundException('Book not found');
+    }
+
     await this.prisma.book.delete({
-      where: {
-        id,
-      },
+      where: { id },
     });
   }
 }

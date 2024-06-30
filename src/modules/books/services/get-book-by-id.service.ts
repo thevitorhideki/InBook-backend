@@ -1,26 +1,20 @@
-import { Book } from '@/entities/book';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { BooksRepository } from '../books.repository';
+import { BookDetailsDto } from '../dto/book-details.dto';
 
 interface IGetBookByIdRequest {
   bookId: number;
 }
 
-type GetBookByIdResponse = Book | null;
-
 @Injectable()
 export class GetBookById {
-  constructor(private booksRepository: BooksRepository) {}
+  constructor(private readonly booksRepository: BooksRepository) {}
 
-  async execute(request: IGetBookByIdRequest): Promise<GetBookByIdResponse> {
+  async execute(request: IGetBookByIdRequest): Promise<BookDetailsDto> {
     const { bookId } = request;
 
-    const book = await this.booksRepository.findById(bookId);
+    const book = await this.booksRepository.getBookById(bookId);
 
-    if (!book) {
-      throw new NotFoundException('Book not found');
-    }
-
-    return book;
+    return BookDetailsDto.fromEntity(book);
   }
 }

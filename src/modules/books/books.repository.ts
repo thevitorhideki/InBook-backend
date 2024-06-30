@@ -1,12 +1,12 @@
-import { Genre, Language } from '@prisma/client';
-import { Book } from 'src/entities/book';
+import { Book } from '@/database/entities/book';
+import { Genre } from '@/database/enums/genre';
+import { Language } from '@/database/enums/language';
 
 export abstract class BooksRepository {
-  abstract findById(id: number): Promise<Book | null>;
-  abstract findByAuthorId(authorId: number): Promise<Book[] | null>;
-  abstract findByGenre(genre: Genre): Promise<Book[] | null>;
-  abstract findByLanguage(language: Language): Promise<Book[] | null>;
-  abstract create(bookData: Book): Promise<void>;
-  abstract update(id: number, bookData: Partial<Book>): Promise<void>;
-  abstract delete(id: number): Promise<void>;
+  abstract getBookById(id: number): Promise<any>;
+  abstract getBooksByGenre(genre: Genre): Promise<any[]>;
+  abstract getBooksByLanguage(language: Language): Promise<any[]>;
+  abstract createBook(bookData: Book): Promise<void>;
+  abstract updateBook(id: number, bookData: Partial<Book>): Promise<void>;
+  abstract deleteBook(id: number): Promise<void>;
 }

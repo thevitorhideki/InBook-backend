@@ -1,55 +1,27 @@
-import { AuthorsRepository } from '@/modules/authors/authors-repository';
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { Genre, Language } from '@prisma/client';
+import { Injectable } from '@nestjs/common';
 import { BooksRepository } from '../books.repository';
+import { UpdateBookDto } from '../dto/update-book.dto';
 
 interface IUpdateBookRequest {
   bookId: number;
-  bookData: {
-    title?: string | null;
-    description?: string | null;
-    genres?: Genre[] | null;
-    language?: Language | null;
-    pages?: number | null;
-    duration?: number | null;
-    publicationYear?: number | null;
-    coverImageUrl?: string | null;
-    ebookFileUrl?: string | null;
-    audiobookFileUrl?: string | null;
-    authorId?: number | null;
-  };
+  bookData: UpdateBookDto;
 }
 
 type IUpdateBookResponse = void;
 
 @Injectable()
 export class UpdateBook {
-  constructor(
-    private booksRepository: BooksRepository,
-    private authorsRepository: AuthorsRepository,
-  ) {}
+  constructor(private readonly booksRepository: BooksRepository) {}
 
   async execute(request: IUpdateBookRequest): Promise<IUpdateBookResponse> {
     const { bookId, bookData } = request;
 
-    const existingBook = await this.booksRepository.findById(bookId);
+    const existingBook = await this.booksRepository.getBookById(bookId);
 
-    if (!existingBook) {
-      throw new NotFoundException('Book not found');
-    }
-
-    if (bookData.authorId) {
-      const authorExists = await this.authorsRepository.getAuthorById(
-        bookData.authorId,
-      );
-
-      if (!authorExists) {
-        throw new NotFoundException('Author not found');
-      }
-    } else {
+    if (!bookData.authorId) {
       bookData.authorId = existingBook.authorId;
     }
 
-    await this.booksRepository.update(bookId, bookData);
+    await this.booksRepository.updateBook(bookId, bookData);
   }
 }

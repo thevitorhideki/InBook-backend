@@ -1,5 +1,4 @@
-import { Author } from '@/entities/author';
-import { Author as RawAuthor } from '@prisma/client';
+import { Author } from '@/database/entities/author';
 
 export class PrismaAuthorMapper {
   static toPrisma(author: Author) {
@@ -12,13 +11,17 @@ export class PrismaAuthorMapper {
     };
   }
 
-  static toEntity(raw: RawAuthor): Author {
-    return new Author({
-      name: raw.name,
-      avatarUrl: raw.avatarUrl,
-      about: raw.about,
-      birthYear: raw.birthYear,
-      nationality: raw.nationality,
-    });
+  static toEntity(raw: any): Author {
+    return new Author(
+      {
+        name: raw.name,
+        avatarUrl: raw.avatarUrl,
+        about: raw.about,
+        birthYear: raw.birthYear,
+        nationality: raw.nationality,
+        books: raw.books,
+      },
+      raw.id,
+    );
   }
 }

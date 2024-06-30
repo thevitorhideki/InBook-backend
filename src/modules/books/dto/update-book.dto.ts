@@ -1,72 +1,74 @@
+import { Genre } from '@/database/enums/genre';
+import { Language } from '@/database/enums/language';
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { Genre, Language } from '@prisma/client';
-import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsEnum,
+  IsInt,
+  IsNumber,
+  IsOptional,
+  IsPositive,
+  IsString,
+} from 'class-validator';
 
 export class UpdateBookDto {
-  @ApiPropertyOptional({ required: true, example: 'Dracula' })
-  @IsString()
+  @ApiPropertyOptional({ example: 'Dracula' })
+  @IsString({ message: 'Title must be a string' })
   @IsOptional()
   title: string;
 
-  @ApiPropertyOptional({ required: true, example: 'A vampire story' })
-  @IsString()
+  @ApiPropertyOptional({ example: 'A vampire story' })
+  @IsString({ message: 'Description must be a string' })
   @IsOptional()
   description: string;
 
-  @ApiPropertyOptional({ type: [Genre], required: true, enum: Genre })
+  @ApiPropertyOptional({ type: [String], enum: Genre })
   @IsEnum(Genre, { each: true, message: 'Invalid genre' })
   @IsOptional()
   genres: Genre[];
 
-  @ApiPropertyOptional({ required: true, enum: Language })
-  @IsEnum(Language, { each: true, message: 'Invalid language' })
+  @ApiPropertyOptional({ enum: Language })
+  @IsEnum(Language, { message: 'Invalid language' })
   @IsOptional()
   language: Language;
 
-  @ApiPropertyOptional({ required: true, example: 300 })
-  @IsNumber()
+  @ApiPropertyOptional({ example: 300 })
+  @IsNumber({}, { message: 'Pages must be a number' })
+  @IsPositive({ message: 'Pages must be a positive number' })
   @IsOptional()
   pages: number;
 
   @ApiPropertyOptional({
-    required: true,
     example: 180,
     description: 'Duration in minutes',
   })
-  @IsNumber()
+  @IsNumber({}, { message: 'Duration must be a number' })
+  @IsPositive({ message: 'Duration must be a positive number' })
   @IsOptional()
   duration: number;
 
-  @ApiPropertyOptional({ required: false, example: 1897 })
-  @IsNumber()
+  @ApiPropertyOptional({ example: 1897 })
+  @IsNumber({}, { message: 'Publication year must be a number' })
+  @IsPositive({ message: 'Publication year must be a positive number' })
   @IsOptional()
-  publicationYear: number;
+  publicationYear: number | null;
 
-  @ApiPropertyOptional({
-    required: false,
-    example: 'https://example.com/image.jpg',
-  })
-  @IsString()
+  @ApiPropertyOptional({ example: 'https://example.com/image.jpg' })
+  @IsString({ message: 'Cover image URL must be a string' })
   @IsOptional()
-  coverImageUrl: string;
+  coverImageUrl: string | null;
 
-  @ApiPropertyOptional({
-    required: false,
-    example: 'https://example.com/ebook.pdf',
-  })
-  @IsString()
+  @ApiPropertyOptional({ example: 'https://example.com/ebook.pdf' })
+  @IsString({ message: 'Ebook file URL must be a string' })
   @IsOptional()
-  ebookFileUrl: string;
+  ebookFileUrl: string | null;
 
-  @ApiPropertyOptional({
-    required: false,
-    example: 'https://example.com/audiobook.mp3',
-  })
-  @IsString()
+  @ApiPropertyOptional({ example: 'https://example.com/audiobook.mp3' })
+  @IsString({ message: 'Audiobook file URL must be a string' })
   @IsOptional()
-  audiobookFileUrl: string;
+  audiobookFileUrl: string | null;
 
-  @ApiPropertyOptional({ required: true, example: 1 })
+  @ApiPropertyOptional({ example: 1 })
+  @IsInt({ message: 'Author ID must be an integer' })
   @IsOptional()
-  authorId: number;
+  authorId: number | null;
 }
