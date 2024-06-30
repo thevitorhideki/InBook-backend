@@ -1,3 +1,4 @@
+import { Genre } from '@/database/enums/genre';
 import { CreateBookDto } from '@/modules/books/dto/create-book.dto';
 import { UpdateBookDto } from '@/modules/books/dto/update-book.dto';
 import { CreateBook } from '@/modules/books/services/create-book.service';
@@ -12,14 +13,18 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import {
   ApiOperation,
+  ApiQuery,
   ApiResponse,
   ApiResponseProperty,
   ApiTags,
 } from '@nestjs/swagger';
+import { BookCollectionDto } from './dto/book-collection.dto';
 import { BookDetailsDto } from './dto/book-details.dto';
+import { GetBooksByGenre } from './services/get-books-by-genre.service';
 
 @ApiTags('Books')
 @Controller('books')
@@ -29,6 +34,7 @@ export class BooksController {
     private readonly deleteBook: DeleteBook,
     private readonly getBookById: GetBookById,
     private readonly updateBook: UpdateBook,
+    private readonly getBooksByGenre: GetBooksByGenre,
   ) {}
 
   @Get(':id')
@@ -44,6 +50,25 @@ export class BooksController {
   @ApiResponseProperty({ type: BookDetailsDto })
   async getById(@Param('id') id: string): Promise<BookDetailsDto> {
     return await this.getBookById.execute({ bookId: parseInt(id) });
+  }
+
+  @Get()
+  @ApiOperation({ summary: 'Get books by genre' })
+  @ApiResponse({
+    status: 200,
+    description: 'The books have been successfully retrieved',
+  })
+  @ApiResponseProperty({ type: [BookDetailsDto] })
+  @ApiQuery({ name: 'genre', enum: Genre, required: true })
+  @ApiQuery({ name: 'limit', required: false })
+  async getByGenre(
+    @Query('genre') genre: Genre,
+    @Query('limit') limit: string,
+  ): Promise<BookCollectionDto> {
+    return await this.getBooksByGenre.execute({
+      genre,
+      limit: parseInt(limit),
+    });
   }
 
   @Post()

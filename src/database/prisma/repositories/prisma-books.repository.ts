@@ -1,6 +1,5 @@
 import { Book } from '@/database/entities/book';
 import { Genre } from '@/database/enums/genre';
-import { Language } from '@/database/enums/language';
 import { BooksRepository } from '@/modules/books/books.repository';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaBookMapper } from '../mappers/prisma-book.mapper';
@@ -35,29 +34,20 @@ export class PrismaBooksRepository implements BooksRepository {
     return PrismaBookMapper.toEntity(book);
   }
 
-  async getBooksByGenre(genre: Genre): Promise<Book[]> {
+  async getBooksByGenre(genre: Genre, limit?: number): Promise<Book[]> {
     const books = await this.prisma.book.findMany({
       where: {
         genres: {
           has: genre,
         },
       },
+      include: {
+        author: true,
+      },
+      take: limit | 10,
     });
 
     return books.map(PrismaBookMapper.toEntity);
-  }
-
-  async getBooksByLanguage(language: Language): Promise<any[]> {
-    const books = await this.prisma.book.findMany({
-      where: {
-        language,
-      },
-      include: {
-        reviews: true,
-      },
-    });
-
-    return books;
   }
 
   async createBook(bookData: Book): Promise<void> {
