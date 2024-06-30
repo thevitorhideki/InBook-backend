@@ -1,3 +1,4 @@
+import { Replace } from '@/helpers/Replace';
 import { User } from './user';
 
 export interface IProfileProps {
@@ -5,16 +6,17 @@ export interface IProfileProps {
   lastName: string;
   avatarUrl?: string | null;
   userId: number;
-  user?: User;
+  user: User;
 }
 
 export class Profile {
   private _id: number | undefined;
   private props: IProfileProps;
 
-  constructor(props: IProfileProps, id?: number) {
+  constructor(props: Replace<IProfileProps, { user?: User }>, id?: number) {
     this.props = {
       ...props,
+      user: props.user ?? null,
     };
     this._id = id;
   }

@@ -1,29 +1,45 @@
 import { Replace } from '@/helpers/Replace';
+import { hashSync } from 'bcrypt';
 import { Book } from './book';
 import { Profile } from './profile';
 import { Review } from './review';
-import { hashSync } from 'bcrypt';
 
 export interface IUserProps {
   username: string;
   email: string;
   password: string;
-  profile?: Profile;
-  reviews?: Review[];
-  books?: Book[];
+  profile: Profile;
+  reviews: Review[];
+  books: Book[];
   createdAt: Date;
-  updatedAt?: Date | null;
+  updatedAt: Date;
 }
 
 export class User {
   private _id: number | undefined;
   private props: IUserProps;
 
-  constructor(props: Replace<IUserProps, { createdAt?: Date }>, id?: number) {
+  constructor(
+    props: Replace<
+      IUserProps,
+      {
+        profile?: Profile;
+        reviews?: Review[];
+        books: Book[];
+        createdAt?: Date;
+        updatedAt?: Date;
+      }
+    >,
+    id?: number,
+  ) {
     this.props = {
       ...props,
       password: hashSync(props.password, 10),
+      profile: props.profile ?? null,
+      reviews: props.reviews ?? [],
+      books: props.books ?? [],
       createdAt: props.createdAt ?? new Date(),
+      updatedAt: props.updatedAt ?? null,
     };
     this._id = id;
   }
@@ -60,7 +76,7 @@ export class User {
     return this.props.createdAt;
   }
 
-  public get updatedAt(): Date | null {
+  public get updatedAt(): Date {
     return this.props.updatedAt;
   }
 

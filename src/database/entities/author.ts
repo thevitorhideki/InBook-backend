@@ -1,3 +1,4 @@
+import { Replace } from '@/helpers/Replace';
 import { Book } from './book';
 
 export interface IAuthorProps {
@@ -6,16 +7,17 @@ export interface IAuthorProps {
   about?: string | null;
   birthYear?: number | null;
   nationality?: string | null;
-  books?: Book[];
+  books: Book[];
 }
 
 export class Author {
   private _id: number | undefined;
   private props: IAuthorProps;
 
-  constructor(props: IAuthorProps, id?: number) {
+  constructor(props: Replace<IAuthorProps, { books?: Book[] }>, id?: number) {
     this.props = {
       ...props,
+      books: props.books ?? [],
     };
     this._id = id;
   }

@@ -10,21 +10,29 @@ export interface IReviewProps {
   enjoyedNarrator: boolean;
   title?: string;
   content?: string;
-  user?: User;
-  book?: Book;
+  user: User;
+  book: Book;
 
   createdAt: Date;
-  updatedAt?: Date | null;
+  updatedAt: Date;
 }
 
 export class Review {
   private _id: number | undefined;
   private props: IReviewProps;
 
-  constructor(props: Replace<IReviewProps, { createdAt?: Date }>) {
+  constructor(
+    props: Replace<
+      IReviewProps,
+      { user?: User; book?: Book; createdAt?: Date; updatedAt?: Date }
+    >,
+  ) {
     this.props = {
       ...props,
+      user: props.user ?? null,
+      book: props.book ?? null,
       createdAt: props.createdAt ?? new Date(),
+      updatedAt: props.updatedAt ?? null,
     };
   }
 
@@ -72,7 +80,7 @@ export class Review {
     return this.props.createdAt;
   }
 
-  public get updatedAt(): Date | null | undefined {
+  public get updatedAt(): Date {
     return this.props.updatedAt;
   }
 

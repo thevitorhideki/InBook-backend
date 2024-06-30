@@ -22,7 +22,7 @@ export interface IBookProps {
   interactions: UserBookInteraction[];
 
   createdAt: Date;
-  updatedAt?: Date | null;
+  updatedAt: Date;
 }
 
 export class Book {
@@ -37,6 +37,7 @@ export class Book {
         reviews?: Review[];
         interactions?: UserBookInteraction[];
         createdAt?: Date;
+        updatedAt?: Date;
       }
     >,
     id?: number,
@@ -47,6 +48,7 @@ export class Book {
       reviews: props.reviews ?? [],
       interactions: props.interactions ?? [],
       createdAt: props.createdAt ?? new Date(),
+      updatedAt: props.updatedAt ?? new Date(),
     };
     this._id = id;
   }
@@ -115,7 +117,7 @@ export class Book {
     return this.props.createdAt;
   }
 
-  public get updatedAt(): Date | null | undefined {
+  public get updatedAt(): Date {
     return this.props.updatedAt;
   }
 
@@ -167,7 +169,7 @@ export class Book {
     this.props.authorId = authorId;
   }
 
-  public set updatedAt(updatedAt: Date | null) {
+  public set updatedAt(updatedAt: Date) {
     this.props.updatedAt = updatedAt;
   }
 }
