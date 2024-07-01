@@ -12,4 +12,16 @@ export class PrismaReviewMapper {
       content: review.content,
     };
   }
+
+  static toEntity(review: any): Review {
+    return new Review({
+      userId: review.userId,
+      bookId: review.bookId,
+      recommended: review.recommended,
+      enjoyedContent: review.enjoyedContent,
+      enjoyedNarrator: review.enjoyedNarrator,
+      title: review.title,
+      content: review.content,
+    });
+  }
 }

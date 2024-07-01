@@ -10,6 +10,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
   Param,
   Post,
   Put,
@@ -27,7 +28,7 @@ import { BookDetailsDto } from './dto/book-details.dto';
 import { GetBooksByGenre } from './services/get-books-by-genre.service';
 
 @ApiTags('Books')
-@Controller('books')
+@Controller()
 export class BooksController {
   constructor(
     private readonly createBook: CreateBook,
@@ -65,6 +66,10 @@ export class BooksController {
     @Query('genre') genre: Genre,
     @Query('limit') limit: string,
   ): Promise<BookCollectionDto> {
+    if (!Object.values(Genre).includes(genre)) {
+      throw new HttpException({ message: 'Invalid genre' }, 400);
+    }
+
     return await this.getBooksByGenre.execute({
       genre,
       limit: parseInt(limit),

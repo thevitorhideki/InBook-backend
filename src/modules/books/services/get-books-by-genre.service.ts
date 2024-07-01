@@ -1,5 +1,5 @@
 import { Genre } from '@/database/enums/genre';
-import { HttpException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { BooksRepository } from '../books.repository';
 import { BookCollectionDto } from '../dto/book-collection.dto';
 
@@ -14,10 +14,6 @@ export class GetBooksByGenre {
 
   async execute(request: IGetBooksByGenreRequest): Promise<BookCollectionDto> {
     const { genre, limit } = request;
-
-    if (!Object.values(Genre).includes(genre)) {
-      throw new HttpException({ message: 'Invalid genre' }, 400);
-    }
 
     const books = await this.booksRepository.getBooksByGenre(genre, limit);
 
