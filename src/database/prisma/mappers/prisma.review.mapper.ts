@@ -1,4 +1,6 @@
+import { Book } from '@/database/entities/book';
 import { Review } from '@/database/entities/review';
+import { User } from '@/database/entities/user';
 
 export class PrismaReviewMapper {
   static toPrisma(review: Review) {
@@ -22,6 +24,8 @@ export class PrismaReviewMapper {
       enjoyedNarrator: review.enjoyedNarrator,
       title: review.title,
       content: review.content,
+      book: review.book as Book,
+      user: review.user as User,
     });
   }
 }

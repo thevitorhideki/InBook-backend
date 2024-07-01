@@ -2,6 +2,7 @@ import { Book } from '@/database/entities/book';
 import { Review } from '@/database/entities/review';
 import { Genre } from '@/database/enums/genre';
 import { Language } from '@/database/enums/language';
+import { ReviewDetailsDto } from '@/modules/reviews/dto/review-details.dto';
 
 export class BookDetailsDto {
   title: string;
@@ -20,19 +21,7 @@ export class BookDetailsDto {
     avatarUrl: string;
     about: string;
   };
-  reviews: {
-    recommended: boolean;
-    enjoyedContent: boolean;
-    enjoyedNarrator: boolean;
-    title: string;
-    content: string;
-    user: {
-      username: string;
-      profile: {
-        avatarUrl: string;
-      };
-    };
-  }[];
+  reviews: ReviewDetailsDto[];
   reviewsCount: number;
 
   static fromEntity(entity: Book): BookDetailsDto {
@@ -76,9 +65,7 @@ export class BookDetailsDto {
         content: review.content,
         user: {
           username: review.user.username,
-          profile: {
-            avatarUrl: review.user.profile.avatarUrl,
-          },
+          avatarUrl: review.user.profile.avatarUrl,
         },
       })),
       reviewsCount: reviews.length,
