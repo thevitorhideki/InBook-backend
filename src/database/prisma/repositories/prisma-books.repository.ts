@@ -10,28 +10,31 @@ export class PrismaBooksRepository implements BooksRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async getBookById(id: number): Promise<Book> {
-    const book = await this.prisma.book.findUnique({
-      where: { id },
-      include: {
-        author: true,
-        reviews: {
-          include: {
-            user: {
-              include: {
-                profile: true,
+    try {
+      const book = await this.prisma.book.findUniqueOrThrow({
+        where: { id },
+        include: {
+          author: true,
+          reviews: {
+            include: {
+              user: {
+                include: {
+                  profile: true,
+                },
               },
             },
           },
+          interactions: true,
         },
-        interactions: true,
-      },
-    });
+      });
 
-    if (!book) {
-      throw new NotFoundException('Book not found');
+      return PrismaBookMapper.toEntity(book);
+    } catch (error) {
+      if (error.code === 'P2025') {
+        throw new NotFoundException('Book not found');
+      }
+      throw error;
     }
-
-    return PrismaBookMapper.toEntity(book);
   }
 
   async getBooksByGenre(genre: Genre, limit?: number): Promise<Book[]> {
@@ -51,57 +54,50 @@ export class PrismaBooksRepository implements BooksRepository {
   }
 
   async createBook(bookData: Book): Promise<void> {
-    const author = await this.prisma.author.findUnique({
-      where: { id: bookData.authorId },
-    });
-
-    if (!author) {
-      throw new NotFoundException('Author not found');
-    }
-
     const raw = PrismaBookMapper.toPrisma(bookData);
 
-    await this.prisma.book.create({
-      data: raw,
-    });
+    try {
+      await this.prisma.book.create({
+        data: raw,
+      });
+    } catch (error) {
+      if (error.code === 'P2003') {
+        throw new NotFoundException('Author not found');
+      }
+      throw error;
+    }
   }
 
   async updateBook(id: number, bookData: Book): Promise<void> {
-    const book = await this.prisma.book.findUnique({ where: { id } });
-
-    if (!book) {
-      throw new NotFoundException('Book not found');
-    }
-
-    if (!bookData.authorId) {
-      bookData.authorId = book.authorId;
-    } else {
-      const author = await this.prisma.author.findUnique({
-        where: { id: bookData.authorId },
-      });
-
-      if (!author) {
-        throw new NotFoundException('Author not found');
-      }
-    }
-
     const raw = PrismaBookMapper.toPrisma(bookData);
 
-    await this.prisma.book.update({
-      where: { id },
-      data: raw,
-    });
+    try {
+      await this.prisma.book.update({
+        where: { id },
+        data: raw,
+      });
+    } catch (error) {
+      if (error.code === 'P2025') {
+        throw new NotFoundException('Book not found');
+      } else if (error.code === 'P2003') {
+        throw new NotFoundException('Author not found');
+      }
+
+      throw error;
+    }
   }
 
   async deleteBook(id: number): Promise<void> {
-    const book = await this.prisma.book.findUnique({ where: { id } });
+    try {
+      await this.prisma.book.delete({
+        where: { id },
+      });
+    } catch (error) {
+      if (error.code === 'P2025') {
+        throw new NotFoundException('Book not found');
+      }
 
-    if (!book) {
-      throw new NotFoundException('Book not found');
+      throw error.code;
     }
-
-    await this.prisma.book.delete({
-      where: { id },
-    });
   }
 }

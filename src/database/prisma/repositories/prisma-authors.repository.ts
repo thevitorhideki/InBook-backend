@@ -15,46 +15,47 @@ export class PrismaAuthorsRepository implements AuthorsRepository {
   }
 
   async getAuthorById(authorId: number): Promise<Author> {
-    const author = await this.prisma.author.findUnique({
-      where: { id: authorId },
-      include: {
-        books: true,
-      },
-    });
+    try {
+      const author = await this.prisma.author.findUniqueOrThrow({
+        where: { id: authorId },
+        include: {
+          books: true,
+        },
+      });
 
-    if (!author) {
-      throw new NotFoundException('Author not found');
+      return PrismaAuthorMapper.toEntity(author);
+    } catch (error) {
+      if (error.code === 'P2025') {
+        throw new NotFoundException('Author not found');
+      }
+      throw error;
     }
-
-    return PrismaAuthorMapper.toEntity(author);
   }
 
   async updateAuthor(authorId: number, authorData: Author): Promise<void> {
-    const author = await this.prisma.author.findUnique({
-      where: { id: authorId },
-    });
-
-    if (!author) {
-      throw new NotFoundException('Author not found');
-    }
-
     const raw = PrismaAuthorMapper.toPrisma(authorData);
 
-    await this.prisma.author.update({
-      where: { id: authorId },
-      data: raw,
-    });
+    try {
+      await this.prisma.author.update({
+        where: { id: authorId },
+        data: raw,
+      });
+    } catch (error) {
+      if (error.code === 'P2025') {
+        throw new NotFoundException('Author not found');
+      }
+      throw error;
+    }
   }
 
   async deleteAuthor(authorId: number): Promise<void> {
-    const book = await this.prisma.author.findUnique({
-      where: { id: authorId },
-    });
-
-    if (!book) {
-      throw new NotFoundException('Author not found');
+    try {
+      await this.prisma.author.delete({ where: { id: authorId } });
+    } catch (error) {
+      if (error.code === 'P2025') {
+        throw new NotFoundException('Author not found');
+      }
+      throw error;
     }
-
-    await this.prisma.author.delete({ where: { id: authorId } });
   }
 }

@@ -1,8 +1,7 @@
 import { Review } from '@/database/entities/review';
 import { ReviewsRepository } from '@/modules/reviews/reviews.repository';
 import {
-  HttpException,
-  HttpStatus,
+  ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -14,10 +13,12 @@ export class PrismaReviewsRepository implements ReviewsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async getBookReviews(bookId: number): Promise<Review[]> {
-    const book = await this.prisma.book.findUnique({ where: { id: bookId } });
-
-    if (!book) {
-      throw new NotFoundException('Book not found');
+    try {
+      await this.prisma.book.findUniqueOrThrow({ where: { id: bookId } });
+    } catch (error) {
+      if (error.code === 'P2025') {
+        throw new NotFoundException('Book not found');
+      }
     }
 
     const reviews = await this.prisma.review.findMany({
@@ -36,28 +37,10 @@ export class PrismaReviewsRepository implements ReviewsRepository {
       },
     });
 
-    console.log(reviews);
-
     return reviews.map(PrismaReviewMapper.toEntity);
   }
 
   async createReview(reviewData: Review): Promise<void> {
-    const book = await this.prisma.book.findUnique({
-      where: { id: reviewData.bookId },
-    });
-
-    if (!book) {
-      throw new NotFoundException('Book not found');
-    }
-
-    const user = await this.prisma.user.findUnique({
-      where: { id: reviewData.userId },
-    });
-
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-
     const raw = PrismaReviewMapper.toPrisma(reviewData);
 
     try {
@@ -66,11 +49,20 @@ export class PrismaReviewsRepository implements ReviewsRepository {
       });
     } catch (error) {
       if (error.code === 'P2002') {
-        throw new HttpException(
-          'You have already reviewed this book',
-          HttpStatus.CONFLICT,
-        );
+        throw new ConflictException('You have already reviewed this book');
+      } else if (
+        error.code === 'P2003' &&
+        error.meta?.field_name?.includes('userId')
+      ) {
+        throw new NotFoundException('User not found');
+      } else if (
+        error.code === 'P2003' &&
+        error.meta?.field_name?.includes('bookId')
+      ) {
+        throw new NotFoundException('Book not found');
       }
+
+      throw error;
     }
   }
 }
