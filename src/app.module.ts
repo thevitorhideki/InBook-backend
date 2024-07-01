@@ -21,7 +21,7 @@ import { UsersModule } from './modules/users/users.module';
         module: BooksModule,
         children: [
           {
-            path: ':id/reviews',
+            path: ':bookId/reviews',
             module: ReviewsModule,
           },
         ],

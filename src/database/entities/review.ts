@@ -26,6 +26,7 @@ export class Review {
       IReviewProps,
       { user?: User; book?: Book; createdAt?: Date; updatedAt?: Date }
     >,
+    id?: number,
   ) {
     this.props = {
       ...props,
@@ -34,6 +35,7 @@ export class Review {
       createdAt: props.createdAt ?? new Date(),
       updatedAt: props.updatedAt ?? null,
     };
+    this._id = id;
   }
 
   public get id(): number | undefined {

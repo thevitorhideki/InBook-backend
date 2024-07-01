@@ -38,7 +38,7 @@ export class BooksController {
     private readonly getBooksByGenre: GetBooksByGenre,
   ) {}
 
-  @Get(':id')
+  @Get(':bookId')
   @ApiOperation({ summary: 'Get a book by ID' })
   @ApiResponse({
     status: 200,
@@ -49,7 +49,7 @@ export class BooksController {
     description: 'The book was not found',
   })
   @ApiResponseProperty({ type: BookDetailsDto })
-  async getById(@Param('id') id: string): Promise<BookDetailsDto> {
+  async getById(@Param('bookId') id: string): Promise<BookDetailsDto> {
     return await this.getBookById.execute({ bookId: parseInt(id) });
   }
 
@@ -90,7 +90,7 @@ export class BooksController {
     await this.createBook.execute(body);
   }
 
-  @Put(':id')
+  @Put(':bookId')
   @ApiOperation({ summary: 'Update a book by ID' })
   @ApiResponse({
     status: 200,
@@ -100,11 +100,11 @@ export class BooksController {
     status: 404,
     description: 'The book was not found',
   })
-  async update(@Param('id') id: string, @Body() body: UpdateBookDto) {
+  async update(@Param('bookId') id: string, @Body() body: UpdateBookDto) {
     await this.updateBook.execute({ bookId: parseInt(id), bookData: body });
   }
 
-  @Delete(':id')
+  @Delete(':bookId')
   @ApiOperation({ summary: 'Delete a book by ID' })
   @ApiResponse({
     status: 200,
@@ -114,7 +114,7 @@ export class BooksController {
     status: 404,
     description: 'The book was not found',
   })
-  async delete(@Param('id') id: string) {
+  async delete(@Param('bookId') id: string) {
     await this.deleteBook.execute({ bookId: parseInt(id) });
   }
 }

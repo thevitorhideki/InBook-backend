@@ -1,5 +1,19 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { ReviewDetailsDto } from './dto/review-details.dto';
 import { CreateReview } from './services/create-review.service';
@@ -23,11 +37,13 @@ export class ReviewsController {
     status: 404,
     description: 'The book was not found',
   })
-  async getReviews(@Param('id') id: string): Promise<ReviewDetailsDto[]> {
+  async getReviews(@Param('bookId') id: string): Promise<ReviewDetailsDto[]> {
     return this.getBookReviews.execute({ bookId: parseInt(id) });
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post()
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a review' })
   @ApiResponse({
     status: 201,
@@ -38,6 +54,10 @@ export class ReviewsController {
     description: 'The request body is invalid',
   })
   @ApiResponse({
+    status: 401,
+    description: 'Unauthorized access',
+  })
+  @ApiResponse({
     status: 404,
     description: 'The book or user was not found',
   })
@@ -46,11 +66,14 @@ export class ReviewsController {
     description: 'The user already reviewed this book',
   })
   async create(
-    @Param('id') id: string,
+    @Param('bookId') id: string,
     @Body() body: CreateReviewDto,
+    @Request() req: any,
   ): Promise<void> {
+    const userId = req.user.userId;
     await this.createReview.execute({
       bookId: parseInt(id),
+      userId,
       reviewData: body,
     });
   }

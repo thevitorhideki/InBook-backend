@@ -1,18 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import {
-  IsBoolean,
-  IsInt,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateReviewDto {
-  @ApiProperty({ example: 1 })
-  @IsInt()
-  @IsNotEmpty()
-  userId: number;
-
   @ApiProperty({ example: true })
   @IsNotEmpty()
   @IsBoolean()

@@ -5,6 +5,7 @@ import { ReviewsRepository } from '../reviews.repository';
 
 interface ICreateReviewRequest {
   bookId: number;
+  userId: number;
   reviewData: CreateReviewDto;
 }
 
@@ -17,10 +18,11 @@ export class CreateReview {
   constructor(private readonly reviewsRepository: ReviewsRepository) {}
 
   async execute(request: ICreateReviewRequest): Promise<ICreateReviewResponse> {
-    const { bookId, reviewData } = request;
+    const { bookId, userId, reviewData } = request;
 
     const review = new Review({
       ...reviewData,
+      userId,
       bookId,
     });
 
