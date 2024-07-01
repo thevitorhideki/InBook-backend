@@ -25,7 +25,7 @@ export class User {
       {
         profile?: Profile;
         reviews?: Review[];
-        books: Book[];
+        books?: Book[];
         createdAt?: Date;
         updatedAt?: Date;
       }

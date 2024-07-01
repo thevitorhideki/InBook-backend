@@ -4,6 +4,7 @@ import { DatabaseModule } from './database/database.module';
 import { AuthorsModule } from './modules/authors/authors.module';
 import { BooksModule } from './modules/books/books.module';
 import { ReviewsModule } from './modules/reviews/reviews.module';
+import { UsersModule } from './modules/users/users.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { ReviewsModule } from './modules/reviews/reviews.module';
     AuthorsModule,
     DatabaseModule,
     ReviewsModule,
+    UsersModule,
     RouterModule.register([
       {
         path: 'books',

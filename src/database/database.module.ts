@@ -1,11 +1,13 @@
 import { AuthorsRepository } from '@/modules/authors/authors.repository';
 import { BooksRepository } from '@/modules/books/books.repository';
 import { ReviewsRepository } from '@/modules/reviews/reviews.repository';
+import { UsersRepository } from '@/modules/users/users.repository';
 import { Module } from '@nestjs/common';
 import { PrismaService } from './prisma/prisma.service';
 import { PrismaAuthorsRepository } from './prisma/repositories/prisma-authors.repository';
 import { PrismaBooksRepository } from './prisma/repositories/prisma-books.repository';
 import { PrismaReviewsRepository } from './prisma/repositories/prisma-reviews.repository';
+import { PrismaUsersRepository } from './prisma/repositories/prisma-users.repository';
 
 @Module({
   providers: [
@@ -22,7 +24,16 @@ import { PrismaReviewsRepository } from './prisma/repositories/prisma-reviews.re
       provide: ReviewsRepository,
       useClass: PrismaReviewsRepository,
     },
+    {
+      provide: UsersRepository,
+      useClass: PrismaUsersRepository,
+    },
   ],
-  exports: [BooksRepository, AuthorsRepository, ReviewsRepository],
+  exports: [
+    BooksRepository,
+    AuthorsRepository,
+    ReviewsRepository,
+    UsersRepository,
+  ],
 })
 export class DatabaseModule {}
