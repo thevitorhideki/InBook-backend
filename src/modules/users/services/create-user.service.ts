@@ -1,6 +1,6 @@
 import { User } from '@/database/entities/user';
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from '../dto/creat-user.dto';
+import { CreateUserDto } from '../dto/create-user.dto';
 import { UsersRepository } from '../users.repository';
 
 interface ICreateUserResponse {

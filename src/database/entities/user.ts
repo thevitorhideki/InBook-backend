@@ -39,7 +39,7 @@ export class User {
       reviews: props.reviews ?? [],
       books: props.books ?? [],
       createdAt: props.createdAt ?? new Date(),
-      updatedAt: props.updatedAt ?? null,
+      updatedAt: props.updatedAt ?? new Date(),
     };
     this._id = id;
   }

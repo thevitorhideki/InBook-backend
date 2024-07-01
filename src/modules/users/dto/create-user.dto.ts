@@ -17,7 +17,7 @@ export class CreateUserDto {
   @IsNotEmpty()
   email: string;
 
-  @ApiProperty({ example: 'password' })
+  @ApiProperty({ example: '#StrongPassword1' })
   @IsStrongPassword({
     minLength: 8,
     minLowercase: 1,

@@ -1,6 +1,10 @@
 import { User } from '@/database/entities/user';
 import { UsersRepository } from '@/modules/users/users.repository';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PrismaUserMapper } from '../mappers/prisma-user.mapper';
 import { PrismaService } from '../prisma.service';
 
@@ -8,11 +12,28 @@ import { PrismaService } from '../prisma.service';
 export class PrismaUsersRepository implements UsersRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createUser(userData: User): Promise<any> {
+  async findByUsername(username: string): Promise<any> {
+    try {
+      const raw = await this.prisma.user.findUniqueOrThrow({
+        where: { username },
+      });
+
+      return raw;
+    } catch (error) {
+      if (error.code === 'P2025') {
+        throw new UnauthorizedException('Invalid username or password');
+      }
+      throw error;
+    }
+  }
+
+  async createUser(userData: User): Promise<User> {
     const raw = PrismaUserMapper.toPrisma(userData);
 
     try {
-      await this.prisma.user.create({ data: raw });
+      const user = await this.prisma.user.create({ data: raw });
+
+      return PrismaUserMapper.toEntity(user);
     } catch (error) {
       if (error.code === 'P2002' && error.meta?.target?.includes('username')) {
         throw new BadRequestException('User already exists');
