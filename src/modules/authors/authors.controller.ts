@@ -26,7 +26,7 @@ export class AuthorsController {
     private readonly updateAuthor: UpdateAuthor,
   ) {}
 
-  @Get(':id')
+  @Get(':authorId')
   @ApiOperation({ summary: 'Get an author by id' })
   @ApiResponse({
     status: 200,
@@ -36,7 +36,7 @@ export class AuthorsController {
     status: 404,
     description: 'Author not found',
   })
-  async getById(@Param('id') id: string): Promise<AuthorDetailsDto> {
+  async getById(@Param('authorId') id: string): Promise<AuthorDetailsDto> {
     const author = await this.getAuthorById.execute({ authorId: parseInt(id) });
 
     return AuthorDetailsDto.fromEntity(author);
@@ -56,7 +56,7 @@ export class AuthorsController {
     await this.createAuthor.execute(body);
   }
 
-  @Put(':id')
+  @Put(':authorId')
   @ApiOperation({ summary: 'Update an author by id' })
   @ApiResponse({
     status: 200,
@@ -66,14 +66,14 @@ export class AuthorsController {
     status: 404,
     description: 'Author not found',
   })
-  async update(@Param('id') id: string, @Body() body: UpdateAuthorDto) {
+  async update(@Param('authorId') id: string, @Body() body: UpdateAuthorDto) {
     await this.updateAuthor.execute({
       authorId: parseInt(id),
       authorData: body,
     });
   }
 
-  @Delete(':id')
+  @Delete(':authorId')
   @ApiOperation({ summary: 'Delete an author by id' })
   @ApiResponse({
     status: 200,
@@ -83,7 +83,7 @@ export class AuthorsController {
     status: 404,
     description: 'Author not found',
   })
-  async delete(@Param('id') id: string) {
+  async delete(@Param('authorId') id: string) {
     await this.deleteAuthor.execute({ authorId: parseInt(id) });
   }
 }

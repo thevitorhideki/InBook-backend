@@ -1,11 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Post,
-  Request,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -15,9 +8,11 @@ import {
 } from '@nestjs/swagger';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { LoginUserDataDto } from './dto/login-user-data.dto';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { LocalAuthGuard } from './guards/local-auth.guard';
+import { RefreshJwtAuthGuard } from './guards/refresh-jwt-auth.guard';
 import { Login } from './services/login.service';
+import { RefreshToken } from './services/refresh-token.service';
 import { Register } from './services/register.service';
 
 @ApiTags('Auth')
@@ -26,6 +21,7 @@ export class AuthController {
   constructor(
     private readonly register: Register,
     private readonly login: Login,
+    private readonly refreshToken: RefreshToken,
   ) {}
 
   @Post('register')
@@ -63,11 +59,21 @@ export class AuthController {
     return this.login.execute(req.user);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Get('profile')
+  @UseGuards(RefreshJwtAuthGuard)
+  @Post('refresh')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get the user profile' })
-  getProfile(@Request() req: any) {
-    return req.user;
+  @ApiOperation({ summary: 'Refresh a user token' })
+  @ApiResponse({
+    status: 201,
+    description: 'The user token has been successfully refreshed',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized, invalid token',
+  })
+  async refresh(@Body() body: RefreshTokenDto) {
+    const { refresh_token } = body;
+
+    return await this.refreshToken.execute({ refresh_token });
   }
 }
