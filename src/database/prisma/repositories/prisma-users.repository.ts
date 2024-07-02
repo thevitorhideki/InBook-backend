@@ -13,6 +13,20 @@ import { PrismaService } from '../prisma.service';
 export class PrismaUsersRepository implements UsersRepository {
   constructor(private readonly prisma: PrismaService) {}
 
+  async findById(userId: number): Promise<any> {
+    try {
+      const user = await this.prisma.user.findUniqueOrThrow({
+        where: { id: userId },
+      });
+      return PrismaUserMapper.toEntity(user);
+    } catch (error) {
+      if (error.code === 'P2025') {
+        throw new UnauthorizedException('User not found');
+      }
+      throw error;
+    }
+  }
+
   async findByUsername(username: string): Promise<any> {
     try {
       const raw = await this.prisma.user.findUniqueOrThrow({

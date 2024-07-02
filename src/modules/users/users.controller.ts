@@ -1,4 +1,4 @@
-import { Body, Controller, Patch, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Req, UseGuards } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -7,13 +7,23 @@ import {
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { GetUserDetails } from './services/get-user-details.service';
 import { UpdateUser } from './services/update-user.service';
 
-@ApiTags('Users')
+@ApiTags('Account')
 @UseGuards(JwtAuthGuard)
-@Controller('users')
+@Controller('account')
 export class UsersController {
-  constructor(private readonly updateUser: UpdateUser) {}
+  constructor(
+    private readonly getUserDetails: GetUserDetails,
+    private readonly updateUser: UpdateUser,
+  ) {}
+
+  @Get()
+  @ApiBearerAuth()
+  async getUser(@Req() req: any): Promise<UpdateUserDto> {
+    return await this.getUserDetails.execute({ userId: req.user.userId });
+  }
 
   @Patch()
   @ApiBearerAuth()
