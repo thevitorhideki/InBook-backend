@@ -1,5 +1,5 @@
-import { Genre } from '@/database/enums/genre';
-import { Language } from '@/database/enums/language';
+import { Genre } from '@database/enums/genre';
+import { Language } from '@database/enums/language';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsEnum,

@@ -1,6 +1,6 @@
-import { Book } from '@/database/entities/book';
-import { Genre } from '@/database/enums/genre';
-import { BooksRepository } from '@/modules/books/books.repository';
+import { Book } from '@database/entities/book';
+import { Genre } from '@database/enums/genre';
+import { BooksRepository } from '@modules/books/books.repository';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaBookMapper } from '../mappers/prisma-book.mapper';
 import { PrismaService } from '../prisma.service';
@@ -47,7 +47,7 @@ export class PrismaBooksRepository implements BooksRepository {
       include: {
         author: true,
       },
-      take: limit | 10,
+      take: limit || 10,
     });
 
     return books.map(PrismaBookMapper.toEntity);

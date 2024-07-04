@@ -1,4 +1,4 @@
-import { Review } from '@/database/entities/review';
+import { Review } from '@database/entities/review';
 import { Injectable } from '@nestjs/common';
 import { CreateReviewDto } from '../dto/create-review.dto';
 import { ReviewsRepository } from '../reviews.repository';

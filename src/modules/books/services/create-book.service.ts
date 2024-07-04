@@ -1,4 +1,4 @@
-import { Book } from '@/database/entities/book';
+import { Book } from '@database/entities/book';
 import { Injectable } from '@nestjs/common';
 import { BooksRepository } from '../books.repository';
 import { CreateBookDto } from '../dto/create-book.dto';

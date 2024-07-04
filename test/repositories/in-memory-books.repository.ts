@@ -1,7 +1,7 @@
-import { Book } from '@/database/entities/book';
-import { Genre } from '@/database/enums/genre';
-import { Language } from '@/database/enums/language';
-import { BooksRepository } from '@/modules/books/books.repository';
+import { Book } from '@database/entities/book';
+import { Genre } from '@database/enums/genre';
+import { Language } from '@database/enums/language';
+import { BooksRepository } from '@modules/books/books.repository';
 import { NotFoundException } from '@nestjs/common';
 
 export class InMemoryBooksRepository implements BooksRepository {

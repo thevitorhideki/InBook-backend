@@ -1,4 +1,4 @@
-import { Replace } from '@/helpers/Replace';
+import { Replace } from '@helpers/Replace';
 import { InteractionType } from '../enums/interaction';
 import { Book } from './book';
 import { User } from './user';

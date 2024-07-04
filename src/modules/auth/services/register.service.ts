@@ -1,6 +1,6 @@
-import { User } from '@/database/entities/user';
-import { CreateUserDto } from '@/modules/users/dto/create-user.dto';
-import { UsersRepository } from '@/modules/users/users.repository';
+import { User } from '@database/entities/user';
+import { CreateUserDto } from '@modules/users/dto/create-user.dto';
+import { UsersRepository } from '@modules/users/users.repository';
 import { Injectable } from '@nestjs/common';
 import { Login } from './login.service';
 

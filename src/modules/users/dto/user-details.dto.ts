@@ -1,4 +1,4 @@
-import { User } from '@/database/entities/user';
+import { User } from '@database/entities/user';
 
 export class UserDetailsDto {
   username: string;

@@ -1,7 +1,8 @@
-import { Author } from '@/database/entities/author';
+import { Author } from '@database/entities/author';
+import { CreateAuthorDto } from '@modules/authors/dto/create-author.dto';
 
 export class PrismaAuthorMapper {
-  static toPrisma(author: Author) {
+  static toPrisma(author: CreateAuthorDto) {
     return {
       name: author.name,
       avatarUrl: author.avatarUrl,

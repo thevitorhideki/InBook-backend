@@ -1,6 +1,6 @@
-import { Book } from '@/database/entities/book';
-import { Review } from '@/database/entities/review';
-import { User } from '@/database/entities/user';
+import { Book } from '@database/entities/book';
+import { Review } from '@database/entities/review';
+import { User } from '@database/entities/user';
 
 export class PrismaReviewMapper {
   static toPrisma(review: Review) {

@@ -1,4 +1,4 @@
-import { Replace } from 'src/helpers/Replace';
+import { Replace } from '@helpers/Replace';
 import { Book } from './book';
 import { User } from './user';
 

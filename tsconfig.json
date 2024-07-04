@@ -19,7 +19,10 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@/*": ["./src/*"],
+      "@database/*": ["./src/database/*"],
+      "@helpers/*": ["./src/helpers/*"],
+      "@logging/*": ["./src/logging/*"],
+      "@modules/*": ["./src/modules/*"],
       "@test/*": ["./test/*"]
     }
   }

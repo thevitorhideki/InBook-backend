@@ -1,5 +1,6 @@
-import { Author } from '@/database/entities/author';
-import { AuthorsRepository } from '@/modules/authors/authors.repository';
+import { Author } from '@database/entities/author';
+import { AuthorsRepository } from '@modules/authors/authors.repository';
+import { CreateAuthorDto } from '@modules/authors/dto/create-author.dto';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaAuthorMapper } from '../mappers/prisma-author.mapper';
 import { PrismaService } from '../prisma.service';
@@ -8,10 +9,8 @@ import { PrismaService } from '../prisma.service';
 export class PrismaAuthorsRepository implements AuthorsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createAuthor(authorData: Author): Promise<void> {
-    const raw = PrismaAuthorMapper.toPrisma(authorData);
-
-    await this.prisma.author.create({ data: raw });
+  async createAuthor(authorData: CreateAuthorDto): Promise<void> {
+    await this.prisma.author.create({ data: authorData });
   }
 
   async getAuthorById(authorId: number): Promise<Author> {

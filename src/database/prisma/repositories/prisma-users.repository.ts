@@ -1,6 +1,6 @@
-import { User } from '@/database/entities/user';
-import { UpdateUserDto } from '@/modules/users/dto/update-user.dto';
-import { UsersRepository } from '@/modules/users/users.repository';
+import { User } from '@database/entities/user';
+import { UpdateUserDto } from '@modules/users/dto/update-user.dto';
+import { UsersRepository } from '@modules/users/users.repository';
 import {
   BadRequestException,
   Injectable,

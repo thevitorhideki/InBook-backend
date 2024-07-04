@@ -1,4 +1,4 @@
-import { Profile } from '@/database/entities/profile';
+import { Profile } from '@database/entities/profile';
 
 export class PrismaProfileMapper {
   static toPrisma(profile: Profile) {

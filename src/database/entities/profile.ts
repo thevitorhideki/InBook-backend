@@ -1,4 +1,4 @@
-import { Replace } from '@/helpers/Replace';
+import { Replace } from '@helpers/Replace';
 import { User } from './user';
 
 export interface IProfileProps {

@@ -1,4 +1,4 @@
-import { User } from '@/database/entities/user';
+import { User } from '@database/entities/user';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 export abstract class UsersRepository {

@@ -1,14 +1,14 @@
-import { Genre } from '@/database/enums/genre';
-import { Language } from '@/database/enums/language';
+import { Genre } from '@database/enums/genre';
+import { Language } from '@database/enums/language';
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsEnum,
+  IsInt,
   IsNotEmpty,
   IsNumber,
   IsOptional,
   IsPositive,
   IsString,
-  IsInt,
 } from 'class-validator';
 
 export class CreateBookDto {

@@ -1,4 +1,4 @@
-import { Author } from '@/database/entities/author';
+import { Author } from '@database/entities/author';
 
 export class AuthorDetailsDto {
   name: string;

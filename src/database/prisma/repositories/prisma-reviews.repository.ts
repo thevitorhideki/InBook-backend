@@ -1,5 +1,5 @@
-import { Review } from '@/database/entities/review';
-import { ReviewsRepository } from '@/modules/reviews/reviews.repository';
+import { Review } from '@database/entities/review';
+import { ReviewsRepository } from '@modules/reviews/reviews.repository';
 import {
   ConflictException,
   Injectable,

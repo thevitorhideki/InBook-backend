@@ -1,5 +1,5 @@
-import { Author } from '@/database/entities/author';
-import { AuthorsRepository } from '@/modules/authors/authors.repository';
+import { Author } from '@database/entities/author';
+import { AuthorsRepository } from '@modules/authors/authors.repository';
 import { NotFoundException } from '@nestjs/common';
 
 export class InMemoryAuthorsRepository implements AuthorsRepository {

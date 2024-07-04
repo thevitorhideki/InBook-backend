@@ -1,4 +1,4 @@
-import { IUserProps, User } from '@/database/entities/user';
+import { IUserProps, User } from '@database/entities/user';
 
 type Override = Partial<IUserProps>;
 

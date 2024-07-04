@@ -1,4 +1,4 @@
-import { IProfileProps, Profile } from '@/database/entities/profile';
+import { IProfileProps, Profile } from '@database/entities/profile';
 
 type Override = Partial<IProfileProps>;
 

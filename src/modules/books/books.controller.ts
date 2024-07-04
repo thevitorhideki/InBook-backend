@@ -1,10 +1,4 @@
-import { Genre } from '@/database/enums/genre';
-import { CreateBookDto } from '@/modules/books/dto/create-book.dto';
-import { UpdateBookDto } from '@/modules/books/dto/update-book.dto';
-import { CreateBook } from '@/modules/books/services/create-book.service';
-import { DeleteBook } from '@/modules/books/services/delete-book.service';
-import { GetBookById } from '@/modules/books/services/get-book-by-id.service';
-import { UpdateBook } from '@/modules/books/services/update-book.service';
+import { Genre } from '@database/enums/genre';
 import {
   Body,
   Controller,
@@ -25,7 +19,13 @@ import {
 } from '@nestjs/swagger';
 import { BookCollectionDto } from './dto/book-collection.dto';
 import { BookDetailsDto } from './dto/book-details.dto';
+import { CreateBookDto } from './dto/create-book.dto';
+import { UpdateBookDto } from './dto/update-book.dto';
+import { CreateBook } from './services/create-book.service';
+import { DeleteBook } from './services/delete-book.service';
+import { GetBookById } from './services/get-book-by-id.service';
 import { GetBooksByGenre } from './services/get-books-by-genre.service';
+import { UpdateBook } from './services/update-book.service';
 
 @ApiTags('Books')
 @Controller()

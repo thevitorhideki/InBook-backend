@@ -1,4 +1,4 @@
-import { Genre } from '@/database/enums/genre';
+import { Genre } from '@database/enums/genre';
 import { Injectable } from '@nestjs/common';
 import { BooksRepository } from '../books.repository';
 import { BookCollectionDto } from '../dto/book-collection.dto';

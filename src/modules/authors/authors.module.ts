@@ -1,4 +1,4 @@
-import { DatabaseModule } from '@/database/database.module';
+import { DatabaseModule } from '@database/database.module';
 import { Module } from '@nestjs/common';
 import { AuthorsController } from './authors.controller';
 import { CreateAuthor } from './services/create-author.service';

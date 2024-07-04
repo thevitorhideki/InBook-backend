@@ -1,9 +1,9 @@
-import { Author } from '@/database/entities/author';
-import { Book } from '@/database/entities/book';
-import { Review } from '@/database/entities/review';
-import { UserBookInteraction } from '@/database/entities/user-book-interaction';
-import { Genre } from '@/database/enums/genre';
-import { Language } from '@/database/enums/language';
+import { Author } from '@database/entities/author';
+import { Book } from '@database/entities/book';
+import { Review } from '@database/entities/review';
+import { UserBookInteraction } from '@database/entities/user-book-interaction';
+import { Genre } from '@database/enums/genre';
+import { Language } from '@database/enums/language';
 
 export class PrismaBookMapper {
   static toPrisma(book: Book) {

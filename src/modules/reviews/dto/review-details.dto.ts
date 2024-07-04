@@ -1,4 +1,4 @@
-import { Review } from '@/database/entities/review';
+import { Review } from '@database/entities/review';
 
 export class ReviewDetailsDto {
   recommended: boolean;
@@ -6,7 +6,7 @@ export class ReviewDetailsDto {
   content?: string;
   user: {
     username: string;
-    avatarUrl: string;
+    avatarUrl?: string;
   };
 
   static fromEntity(review: Review): ReviewDetailsDto {

@@ -1,4 +1,4 @@
-import { Replace } from '@/helpers/Replace';
+import { Replace } from '@helpers/Replace';
 import { hashSync } from 'bcrypt';
 import { Book } from './book';
 import { Profile } from './profile';

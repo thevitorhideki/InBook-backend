@@ -1,4 +1,4 @@
-import { IReviewProps, Review } from '@/database/entities/review';
+import { IReviewProps, Review } from '@database/entities/review';
 
 type Override = Partial<IReviewProps>;
 

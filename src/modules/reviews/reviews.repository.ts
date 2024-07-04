@@ -1,4 +1,4 @@
-import { Review } from '@/database/entities/review';
+import { Review } from '@database/entities/review';
 
 export abstract class ReviewsRepository {
   abstract getBookReviews(bookId: number): Promise<Review[]>;

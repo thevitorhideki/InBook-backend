@@ -1,4 +1,4 @@
-import { User } from '@/database/entities/user';
+import { User } from '@database/entities/user';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 

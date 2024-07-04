@@ -1,4 +1,4 @@
-import { Replace } from '@/helpers/Replace';
+import { Replace } from '@helpers/Replace';
 import { Genre } from '../enums/genre';
 import { Language } from '../enums/language';
 import { Author } from './author';

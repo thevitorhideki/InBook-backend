@@ -1,5 +1,5 @@
-import { Book } from '@/database/entities/book';
-import { Genre } from '@/database/enums/genre';
+import { Book } from '@database/entities/book';
+import { Genre } from '@database/enums/genre';
 import { UpdateBookDto } from './dto/update-book.dto';
 
 export abstract class BooksRepository {

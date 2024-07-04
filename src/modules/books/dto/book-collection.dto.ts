@@ -1,5 +1,5 @@
-import { Author } from '@/database/entities/author';
-import { Book } from '@/database/entities/book';
+import { Author } from '@database/entities/author';
+import { Book } from '@database/entities/book';
 
 export class BookCollectionDto {
   books: {

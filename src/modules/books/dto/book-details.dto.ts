@@ -1,8 +1,8 @@
-import { Book } from '@/database/entities/book';
-import { Review } from '@/database/entities/review';
-import { Genre } from '@/database/enums/genre';
-import { Language } from '@/database/enums/language';
-import { ReviewDetailsDto } from '@/modules/reviews/dto/review-details.dto';
+import { Book } from '@database/entities/book';
+import { Review } from '@database/entities/review';
+import { Genre } from '@database/enums/genre';
+import { Language } from '@database/enums/language';
+import { ReviewDetailsDto } from '@modules/reviews/dto/review-details.dto';
 
 export class BookDetailsDto {
   title: string;
