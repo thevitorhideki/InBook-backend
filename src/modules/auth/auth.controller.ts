@@ -40,7 +40,6 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  @ApiBearerAuth()
   @ApiOperation({ summary: 'Login a user' })
   @ApiResponse({
     status: 201,

@@ -1,5 +1,5 @@
 import { Profile } from '@database/entities/profile';
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { PrismaProfileMapper } from '../mappers/prisma-profile.mapper';
 import { PrismaService } from '../prisma.service';
 
@@ -10,8 +10,14 @@ export class PrismaProfileRepository {
   async createProfile(profile: Profile) {
     const raw = PrismaProfileMapper.toPrisma(profile);
 
-    await this.prisma.profile.create({
-      data: raw,
-    });
+    try {
+      await this.prisma.profile.create({
+        data: raw,
+      });
+    } catch (err) {
+      if (err.code === 'P2002') {
+        throw new ConflictException('You already have a profile');
+      }
+    }
   }
 }

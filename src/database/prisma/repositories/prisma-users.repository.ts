@@ -1,5 +1,4 @@
 import { User } from '@database/entities/user';
-import { UpdateUserDto } from '@modules/users/dto/update-user.dto';
 import { UsersRepository } from '@modules/users/users.repository';
 import {
   BadRequestException,
@@ -58,26 +57,6 @@ export class PrismaUsersRepository implements UsersRepository {
         error.meta?.target?.includes('email')
       ) {
         throw new BadRequestException('Email already exists');
-      } else {
-        throw error;
-      }
-    }
-  }
-
-  async updateUser(userId: number, userData: UpdateUserDto): Promise<any> {
-    try {
-      await this.prisma.user.update({
-        where: { id: userId },
-        data: userData,
-      });
-    } catch (error) {
-      if (error.code === 'P2002' && error.meta?.target?.includes('username')) {
-        throw new BadRequestException('This username was already taken');
-      } else if (
-        error.code === 'P2002' &&
-        error.meta?.target?.includes('email')
-      ) {
-        throw new BadRequestException('This email was already taken');
       } else {
         throw error;
       }

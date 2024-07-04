@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Patch, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -6,44 +6,27 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UserDetailsDto } from './dto/user-details.dto';
 import { GetUserDetails } from './services/get-user-details.service';
-import { UpdateUser } from './services/update-user.service';
 
 @ApiTags('Account')
 @UseGuards(JwtAuthGuard)
-@Controller('account')
+@Controller()
 export class UsersController {
-  constructor(
-    private readonly getUserDetails: GetUserDetails,
-    private readonly updateUser: UpdateUser,
-  ) {}
+  constructor(private readonly getUserDetails: GetUserDetails) {}
 
   @Get()
   @ApiBearerAuth()
-  async getUser(@Req() req: any): Promise<UpdateUserDto> {
-    return await this.getUserDetails.execute({ userId: req.user.userId });
-  }
-
-  @Patch()
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Update user' })
+  @ApiOperation({ summary: 'Get user details' })
   @ApiResponse({
     status: 200,
-    description: 'The user has been successfully updated',
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'The data is invalid',
+    description: 'The user details have been successfully retrieved',
   })
   @ApiResponse({
     status: 401,
     description: 'Unauthorized access',
   })
-  async update(@Req() req: any, @Body() body: UpdateUserDto) {
-    return await this.updateUser.execute({
-      userId: req.user.userId,
-      userData: body,
-    });
+  async getUser(@Req() req: any): Promise<UserDetailsDto> {
+    return await this.getUserDetails.execute({ userId: req.user.userId });
   }
 }
