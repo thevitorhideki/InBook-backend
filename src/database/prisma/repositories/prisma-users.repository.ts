@@ -17,6 +17,7 @@ export class PrismaUsersRepository implements UsersRepository {
     try {
       const user = await this.prisma.user.findUniqueOrThrow({
         where: { id: userId },
+        include: { profile: true },
       });
       return PrismaUserMapper.toEntity(user);
     } catch (error) {

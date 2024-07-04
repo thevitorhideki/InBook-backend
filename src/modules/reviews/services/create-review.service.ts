@@ -9,15 +9,11 @@ interface ICreateReviewRequest {
   reviewData: CreateReviewDto;
 }
 
-interface ICreateReviewResponse {
-  review: Review;
-}
-
 @Injectable()
 export class CreateReview {
   constructor(private readonly reviewsRepository: ReviewsRepository) {}
 
-  async execute(request: ICreateReviewRequest): Promise<ICreateReviewResponse> {
+  async execute(request: ICreateReviewRequest): Promise<void> {
     const { bookId, userId, reviewData } = request;
 
     const review = new Review({
@@ -27,7 +23,5 @@ export class CreateReview {
     });
 
     await this.reviewsRepository.createReview(review);
-
-    return { review };
   }
 }

@@ -1,3 +1,4 @@
+import { clerkClient } from '@clerk/clerk-sdk-node';
 import { Genre } from '@database/enums/genre';
 import {
   Body,
@@ -50,6 +51,7 @@ export class BooksController {
   })
   @ApiResponseProperty({ type: BookDetailsDto })
   async getById(@Param('bookId') id: string): Promise<BookDetailsDto> {
+    console.log(await clerkClient.users.getUserList());
     return await this.getBookById.execute({ bookId: parseInt(id) });
   }
 

@@ -1,6 +1,7 @@
 import { Book } from '@database/entities/book';
 import { Genre } from '@database/enums/genre';
 import { BooksRepository } from '@modules/books/books.repository';
+import { CreateBookDto } from '@modules/books/dto/create-book.dto';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaBookMapper } from '../mappers/prisma-book.mapper';
 import { PrismaService } from '../prisma.service';
@@ -53,12 +54,10 @@ export class PrismaBooksRepository implements BooksRepository {
     return books.map(PrismaBookMapper.toEntity);
   }
 
-  async createBook(bookData: Book): Promise<void> {
-    const raw = PrismaBookMapper.toPrisma(bookData);
-
+  async createBook(bookData: CreateBookDto): Promise<void> {
     try {
       await this.prisma.book.create({
-        data: raw,
+        data: bookData,
       });
     } catch (error) {
       if (error.code === 'P2003') {

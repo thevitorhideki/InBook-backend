@@ -1,5 +1,5 @@
+import { Profile } from '@database/entities/profile';
 import { User } from '@database/entities/user';
-import { User as RawUser } from '@prisma/client';
 
 export class PrismaUserMapper {
   static toPrisma(user: User) {
@@ -10,12 +10,13 @@ export class PrismaUserMapper {
     };
   }
 
-  static toEntity(userRaw: RawUser): User {
+  static toEntity(userRaw: any): User {
     return new User(
       {
         username: userRaw.username,
         email: userRaw.email,
         password: userRaw.password,
+        profile: userRaw.profile as Profile,
       },
       userRaw.id,
     );
