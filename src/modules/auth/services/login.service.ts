@@ -11,7 +11,7 @@ export class Login {
 
     const access_token = this.jwtService.sign(payload, {
       secret: process.env.JWT_SECRET,
-      expiresIn: '15 min',
+      expiresIn: '1 hour',
     });
 
     const refresh_token = this.jwtService.sign(payload, {

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { AuthorsRepository } from '../authors.repository';
 
 interface IGetAuthorByIdRequest {
-  authorId: number;
+  authorId: string;
 }
 
 type IGetAuthorByIdResponse = void;

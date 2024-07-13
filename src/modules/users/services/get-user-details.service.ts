@@ -3,7 +3,7 @@ import { UserDetailsDto } from '../dto/user-details.dto';
 import { UsersRepository } from '../users.repository';
 
 interface IFindByIdRequest {
-  userId: number;
+  userId: string;
 }
 
 @Injectable()

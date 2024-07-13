@@ -3,7 +3,7 @@ import { AuthorsRepository } from '../authors.repository';
 import { UpdateAuthorDto } from '../dto/update-author.dto';
 
 interface IUpdateAuthorRequest {
-  authorId: number;
+  authorId: string;
   authorData: UpdateAuthorDto;
 }
 

@@ -37,7 +37,7 @@ export class AuthorsController {
     description: 'Author not found',
   })
   async getById(@Param('authorId') id: string): Promise<AuthorDetailsDto> {
-    const author = await this.getAuthorById.execute({ authorId: parseInt(id) });
+    const author = await this.getAuthorById.execute({ authorId: id });
 
     return AuthorDetailsDto.fromEntity(author);
   }
@@ -68,7 +68,7 @@ export class AuthorsController {
   })
   async update(@Param('authorId') id: string, @Body() body: UpdateAuthorDto) {
     await this.updateAuthor.execute({
-      authorId: parseInt(id),
+      authorId: id,
       authorData: body,
     });
   }
@@ -84,6 +84,6 @@ export class AuthorsController {
     description: 'Author not found',
   })
   async delete(@Param('authorId') id: string) {
-    await this.deleteAuthor.execute({ authorId: parseInt(id) });
+    await this.deleteAuthor.execute({ authorId: id });
   }
 }

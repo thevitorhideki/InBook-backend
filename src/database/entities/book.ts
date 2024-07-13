@@ -16,7 +16,7 @@ export interface IBookProps {
   coverImageUrl?: string | null;
   ebookFileUrl?: string | null;
   audiobookFileUrl?: string | null;
-  authorId: number;
+  authorId: string;
   author: Author;
   reviews: Review[];
   interactions: UserBookInteraction[];
@@ -97,7 +97,7 @@ export class Book {
     return this.props.audiobookFileUrl;
   }
 
-  public get authorId(): number {
+  public get authorId(): string {
     return this.props.authorId;
   }
 
@@ -165,7 +165,7 @@ export class Book {
     this.props.audiobookFileUrl = audiobookFileUrl;
   }
 
-  public set authorId(authorId: number) {
+  public set authorId(authorId: string) {
     this.props.authorId = authorId;
   }
 

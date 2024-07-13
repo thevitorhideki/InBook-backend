@@ -15,7 +15,7 @@ export class CreateReviewDto {
   @ApiProperty({ example: true })
   @IsNotEmpty()
   @IsBoolean()
-  enjoyedNarrator: boolean;
+  enjoyedNarration: boolean;
 
   @ApiPropertyOptional({ example: 'Great book' })
   @IsString()
@@ -23,7 +23,7 @@ export class CreateReviewDto {
   title?: string;
 
   @ApiPropertyOptional({
-    example: 'Really enjoy the content and the narrators voice',
+    example: 'Really enjoy the content and the narrations voice',
   })
   @IsString()
   @IsOptional()

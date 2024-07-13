@@ -5,7 +5,7 @@ import { ReviewsRepository } from '../reviews.repository';
 
 interface ICreateReviewRequest {
   bookId: number;
-  userId: number;
+  userId: string;
   reviewData: CreateReviewDto;
 }
 

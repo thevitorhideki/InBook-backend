@@ -8,9 +8,9 @@ async function main() {
   const author1 = await prisma.author.create({
     data: {
       name: 'J.K. Rowling',
-      avatarUrl: 'https://example.com/avatar1.jpg',
+      avatar_url: 'https://example.com/avatar1.jpg',
       about: 'Author of Harry Potter series',
-      birthYear: 1965,
+      birth_year: 1965,
       nationality: 'British',
     },
   });
@@ -18,9 +18,9 @@ async function main() {
   const author2 = await prisma.author.create({
     data: {
       name: 'George R.R. Martin',
-      avatarUrl: 'https://example.com/avatar2.jpg',
+      avatar_url: 'https://example.com/avatar2.jpg',
       about: 'Author of A Song of Ice and Fire series',
-      birthYear: 1948,
+      birth_year: 1948,
       nationality: 'American',
     },
   });
@@ -36,11 +36,11 @@ async function main() {
       language: 'ENGLISH',
       pages: 223,
       duration: 120, // Example duration in minutes for audiobook
-      publicationYear: 1997,
-      coverImageUrl: 'https://example.com/cover1.jpg',
-      ebookFileUrl: 'https://example.com/ebook1.pdf',
-      audiobookFileUrl: 'https://example.com/audiobook1.mp3',
-      authorId: author1.id,
+      publication_year: 1997,
+      cover_image_url: 'https://example.com/cover1.jpg',
+      ebook_file_url: 'https://example.com/ebook1.pdf',
+      audiobook_file_url: 'https://example.com/audiobook1.mp3',
+      author_id: author1.id,
     },
   });
 
@@ -54,11 +54,11 @@ async function main() {
       language: 'ENGLISH',
       pages: 694,
       duration: 130, // Example duration in minutes for audiobook
-      publicationYear: 1996,
-      coverImageUrl: 'https://example.com/cover2.jpg',
-      ebookFileUrl: 'https://example.com/ebook2.pdf',
-      audiobookFileUrl: 'https://example.com/audiobook2.mp3',
-      authorId: author2.id,
+      publication_year: 1996,
+      cover_image_url: 'https://example.com/cover2.jpg',
+      ebook_file_url: 'https://example.com/ebook2.pdf',
+      audiobook_file_url: 'https://example.com/audiobook2.mp3',
+      author_id: author2.id,
     },
   });
 
@@ -70,9 +70,9 @@ async function main() {
       password: await hash('password123', 10),
       profile: {
         create: {
-          firstName: 'John',
-          lastName: 'Doe',
-          avatarUrl: 'https://example.com/avatar3.jpg',
+          first_name: 'John',
+          last_name: 'Doe',
+          avatar_url: 'https://example.com/avatar3.jpg',
         },
       },
     },
@@ -85,9 +85,9 @@ async function main() {
       password: await hash('password123', 10),
       profile: {
         create: {
-          firstName: 'Jane',
-          lastName: 'Doe',
-          avatarUrl: 'https://example.com/avatar4.jpg',
+          first_name: 'Jane',
+          last_name: 'Doe',
+          avatar_url: 'https://example.com/avatar4.jpg',
         },
       },
     },
@@ -96,11 +96,11 @@ async function main() {
   // Criação de Reviews
   await prisma.review.create({
     data: {
-      userId: user1.id,
-      bookId: book1.id,
+      user_id: user1.id,
+      book_id: book1.id,
       recommended: true,
-      enjoyedContent: true,
-      enjoyedNarrator: false,
+      enjoyed_content: true,
+      enjoyed_narration: false,
       title: 'Great Book!',
       content: 'I really enjoyed reading this book. Highly recommended!',
     },
@@ -108,11 +108,11 @@ async function main() {
 
   await prisma.review.create({
     data: {
-      userId: user2.id,
-      bookId: book1.id,
+      user_id: user2.id,
+      book_id: book1.id,
       recommended: false,
-      enjoyedContent: false,
-      enjoyedNarrator: true,
+      enjoyed_content: false,
+      enjoyed_narration: true,
       title: 'Not my type',
       content: 'I did not enjoy the book as much as I thought I would.',
     },
@@ -120,30 +120,30 @@ async function main() {
 
   await prisma.review.create({
     data: {
-      userId: user1.id,
-      bookId: book2.id,
+      user_id: user1.id,
+      book_id: book2.id,
       recommended: true,
-      enjoyedContent: true,
-      enjoyedNarrator: true,
+      enjoyed_content: true,
+      enjoyed_narration: true,
       title: 'Excellent Read!',
       content: 'This book is a masterpiece. The narration was top-notch.',
     },
   });
 
   // Criação de Interações
-  await prisma.userBookInteraction.create({
+  await prisma.interaction.create({
     data: {
-      userId: user1.id,
-      bookId: book1.id,
-      interactionType: 'READ',
+      user_id: user1.id,
+      book_id: book1.id,
+      interaction_type: 'READ',
     },
   });
 
-  await prisma.userBookInteraction.create({
+  await prisma.interaction.create({
     data: {
-      userId: user2.id,
-      bookId: book2.id,
-      interactionType: 'READ',
+      user_id: user2.id,
+      book_id: book2.id,
+      interaction_type: 'READ',
     },
   });
 

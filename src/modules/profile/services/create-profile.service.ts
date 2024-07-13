@@ -4,7 +4,7 @@ import { CreateProfileDto } from '../dto/create-profile.dto';
 import { ProfileRepository } from '../profile.repository';
 
 interface ICreateProfileRequest {
-  userId: number;
+  userId: string;
   profileData: CreateProfileDto;
 }
 

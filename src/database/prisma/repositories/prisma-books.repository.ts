@@ -1,7 +1,6 @@
 import { Book } from '@database/entities/book';
 import { Genre } from '@database/enums/genre';
 import { BooksRepository } from '@modules/books/books.repository';
-import { CreateBookDto } from '@modules/books/dto/create-book.dto';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaBookMapper } from '../mappers/prisma-book.mapper';
 import { PrismaService } from '../prisma.service';
@@ -10,22 +9,109 @@ import { PrismaService } from '../prisma.service';
 export class PrismaBooksRepository implements BooksRepository {
   constructor(private readonly prisma: PrismaService) {}
 
+  async getBooksByGenre(genre: Genre, limit?: number): Promise<Book[]> {
+    const books = await this.prisma.book.findMany({
+      where: {
+        genres: {
+          has: genre,
+        },
+      },
+      select: {
+        id: true,
+        title: true,
+        cover_image_url: true,
+        author: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+      take: limit || 10,
+      orderBy: {
+        interactions: {
+          _count: 'desc',
+        },
+      },
+    });
+
+    return books.map(PrismaBookMapper.toEntity);
+  }
+
+  async getBooksByRelevance(limit?: number): Promise<any[]> {
+    const books = await this.prisma.book.findMany({
+      select: {
+        id: true,
+        title: true,
+        cover_image_url: true,
+        author: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+      take: limit || 10,
+      orderBy: {
+        interactions: {
+          _count: 'desc',
+        },
+      },
+    });
+
+    return books.map(PrismaBookMapper.toEntity);
+  }
+
   async getBookById(id: number): Promise<Book> {
     try {
       const book = await this.prisma.book.findUniqueOrThrow({
         where: { id },
-        include: {
-          author: true,
-          reviews: {
-            include: {
-              user: {
-                include: {
-                  profile: true,
+        select: {
+          id: true,
+          title: true,
+          description: true,
+          genres: true,
+          language: true,
+          pages: true,
+          duration: true,
+          publication_year: true,
+          cover_image_url: true,
+          author: {
+            select: {
+              id: true,
+              name: true,
+              about: true,
+              avatar_url: true,
+              books: {
+                select: {
+                  id: true,
+                  title: true,
+                  cover_image_url: true,
                 },
               },
             },
           },
-          interactions: true,
+          reviews: {
+            select: {
+              id: true,
+              title: true,
+              content: true,
+              recommended: true,
+              enjoyed_content: true,
+              enjoyed_narration: true,
+              user: {
+                select: {
+                  id: true,
+                  username: true,
+                  profile: {
+                    select: {
+                      avatar_url: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
         },
       });
 
@@ -38,26 +124,12 @@ export class PrismaBooksRepository implements BooksRepository {
     }
   }
 
-  async getBooksByGenre(genre: Genre, limit?: number): Promise<Book[]> {
-    const books = await this.prisma.book.findMany({
-      where: {
-        genres: {
-          has: genre,
-        },
-      },
-      include: {
-        author: true,
-      },
-      take: limit || 10,
-    });
+  async createBook(bookData: Book): Promise<void> {
+    const raw = PrismaBookMapper.toPrisma(bookData);
 
-    return books.map(PrismaBookMapper.toEntity);
-  }
-
-  async createBook(bookData: CreateBookDto): Promise<void> {
     try {
       await this.prisma.book.create({
-        data: bookData,
+        data: raw,
       });
     } catch (error) {
       if (error.code === 'P2003') {

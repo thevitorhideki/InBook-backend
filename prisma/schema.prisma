@@ -8,84 +8,97 @@ datasource db {
 }
 
 model User {
-  id        Int                   @id @default(autoincrement())
-  username  String                @unique
-  email     String                @unique
-  password  String
-  createdAt DateTime              @default(now())
-  updatedAt DateTime              @updatedAt
-  profile   Profile?
-  reviews   Review[]
-  books     UserBookInteraction[]
+  id         String        @id @default(uuid())
+  username   String        @unique
+  email      String        @unique
+  password   String
+  created_at DateTime      @default(now())
+  updated_at DateTime      @updatedAt
+  profile    Profile?
+  reviews    Review[]
+  books      Interaction[]
+
+  @@map("users")
 }
 
 model Profile {
-  id        Int     @id @default(autoincrement())
-  firstName String
-  lastName  String
-  avatarUrl String?
-  userId    Int     @unique
-  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user_id    String  @unique
+  first_name String
+  last_name  String
+  avatar_url String?
+  user       User    @relation(fields: [user_id], references: [id])
+
+  @@index([user_id])
+  @@map("profiles")
 }
 
 model Book {
-  id               Int                   @id @default(autoincrement())
-  title            String
-  description      String
-  genres           Genre[]
-  language         Language
-  pages            Int
-  duration         Int
-  publicationYear  Int?
-  coverImageUrl    String?
-  ebookFileUrl     String?
-  audiobookFileUrl String?
-  authorId         Int
-  createdAt        DateTime              @default(now())
-  updatedAt        DateTime              @updatedAt
-  author           Author                @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  reviews          Review[]
-  interactions     UserBookInteraction[]
+  id                 Int           @id @default(autoincrement())
+  title              String
+  description        String
+  genres             Genre[]
+  language           Language
+  pages              Int
+  duration           Int
+  publication_year   Int?
+  cover_image_url    String?
+  ebook_file_url     String?
+  audiobook_file_url String?
+  author_id          String
+  created_at         DateTime      @default(now())
+  updated_at         DateTime      @updatedAt
+  author             Author        @relation(fields: [author_id], references: [id], onDelete: Cascade)
+  reviews            Review[]
+  interactions       Interaction[]
+
+  @@index([author_id])
+  @@index([language])
+  @@index([genres])
+  @@map("books")
 }
 
 model Author {
-  id          Int     @id @default(autoincrement())
+  id          String  @id @default(uuid())
   name        String
-  avatarUrl   String?
+  avatar_url  String?
   about       String?
-  birthYear   Int?
+  birth_year  Int?
   nationality String?
   books       Book[]
+
+  @@map("authors")
 }
 
 model Review {
-  id              Int      @id @default(autoincrement())
-  userId          Int
-  bookId          Int
-  recommended     Boolean
-  enjoyedContent  Boolean
-  enjoyedNarrator Boolean
-  title           String?
-  content         String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  book            Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                Int      @id @default(autoincrement())
+  user_id           String
+  book_id           Int
+  recommended       Boolean
+  enjoyed_content   Boolean
+  enjoyed_narration Boolean
+  title             String?
+  content           String?
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+  book              Book     @relation(fields: [book_id], references: [id], onDelete: Cascade)
+  user              User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
-  @@unique([userId, bookId])
+  @@unique([user_id, book_id])
+  @@map("reviews")
 }
 
-model UserBookInteraction {
-  id              Int             @id @default(autoincrement())
-  userId          Int
-  bookId          Int
-  interactionType InteractionType
-  book            Book            @relation(fields: [bookId], references: [id], onDelete: Cascade)
-  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+model Interaction {
+  id               Int             @id @default(autoincrement())
+  user_id          String
+  book_id          Int
+  interaction_type InteractionType
+  book             Book            @relation(fields: [book_id], references: [id], onDelete: Cascade)
+  user             User            @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
-  @@unique([userId, bookId, interactionType])
-  @@index([userId])
-  @@index([bookId])
+  @@unique([user_id, book_id, interaction_type])
+  @@index([user_id])
+  @@index([book_id])
+  @@map("interactions")
 }
 
 enum Language {

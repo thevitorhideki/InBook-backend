@@ -1,6 +1,5 @@
 import { Author } from '@database/entities/author';
 import { AuthorsRepository } from '@modules/authors/authors.repository';
-import { CreateAuthorDto } from '@modules/authors/dto/create-author.dto';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaAuthorMapper } from '../mappers/prisma-author.mapper';
 import { PrismaService } from '../prisma.service';
@@ -9,16 +8,27 @@ import { PrismaService } from '../prisma.service';
 export class PrismaAuthorsRepository implements AuthorsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createAuthor(authorData: CreateAuthorDto): Promise<void> {
-    await this.prisma.author.create({ data: authorData });
+  async createAuthor(authorData: Author): Promise<void> {
+    const raw = PrismaAuthorMapper.toPrisma(authorData);
+    await this.prisma.author.create({ data: raw });
   }
 
-  async getAuthorById(authorId: number): Promise<Author> {
+  async getAuthorById(authorId: string): Promise<Author> {
     try {
       const author = await this.prisma.author.findUniqueOrThrow({
         where: { id: authorId },
         include: {
-          books: true,
+          books: {
+            select: {
+              id: true,
+              title: true,
+            },
+            orderBy: {
+              interactions: {
+                _count: 'desc',
+              },
+            },
+          },
         },
       });
 
@@ -31,7 +41,7 @@ export class PrismaAuthorsRepository implements AuthorsRepository {
     }
   }
 
-  async updateAuthor(authorId: number, authorData: Author): Promise<void> {
+  async updateAuthor(authorId: string, authorData: Author): Promise<void> {
     const raw = PrismaAuthorMapper.toPrisma(authorData);
 
     try {
@@ -47,7 +57,7 @@ export class PrismaAuthorsRepository implements AuthorsRepository {
     }
   }
 
-  async deleteAuthor(authorId: number): Promise<void> {
+  async deleteAuthor(authorId: string): Promise<void> {
     try {
       await this.prisma.author.delete({ where: { id: authorId } });
     } catch (error) {

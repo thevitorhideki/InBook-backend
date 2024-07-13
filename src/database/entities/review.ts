@@ -3,11 +3,11 @@ import { Book } from './book';
 import { User } from './user';
 
 export interface IReviewProps {
-  userId: number;
+  userId: string;
   bookId: number;
   recommended: boolean;
   enjoyedContent: boolean;
-  enjoyedNarrator: boolean;
+  enjoyedNarration: boolean;
   title?: string;
   content?: string;
   user: User;
@@ -42,7 +42,7 @@ export class Review {
     return this._id;
   }
 
-  public get userId(): number {
+  public get userId(): string {
     return this.props.userId;
   }
 
@@ -58,8 +58,8 @@ export class Review {
     return this.props.enjoyedContent;
   }
 
-  public get enjoyedNarrator(): boolean {
-    return this.props.enjoyedNarrator;
+  public get enjoyedNarration(): boolean {
+    return this.props.enjoyedNarration;
   }
 
   public get title(): string | null | undefined {

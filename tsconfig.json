@@ -20,7 +20,7 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@database/*": ["./src/database/*"],
-      "@helpers/*": ["./src/helpers/*"],
+      "@helpers/*": ["src/helpers/*"],
       "@logging/*": ["./src/logging/*"],
       "@modules/*": ["./src/modules/*"],
       "@test/*": ["./test/*"]

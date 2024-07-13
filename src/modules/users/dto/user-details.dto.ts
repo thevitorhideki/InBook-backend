@@ -1,19 +1,25 @@
 import { User } from '@database/entities/user';
 
 export class UserDetailsDto {
+  id: string;
   username: string;
   email: string;
-  firstName?: string;
-  lastName?: string;
-  avatarUrl?: string;
+  profile: {
+    firstName?: string;
+    lastName?: string;
+    avatarUrl?: string;
+  };
 
   public static fromEntity(user: User): UserDetailsDto {
     return {
+      id: user.id,
       username: user.username,
       email: user.email,
-      firstName: user.profile.firstName || undefined,
-      lastName: user.profile.lastName || undefined,
-      avatarUrl: user.profile.avatarUrl || undefined,
+      profile: {
+        firstName: user.profile.firstName || undefined,
+        lastName: user.profile.lastName || undefined,
+        avatarUrl: user.profile.avatarUrl || undefined,
+      },
     };
   }
 }

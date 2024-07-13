@@ -22,18 +22,22 @@ export class PrismaReviewsRepository implements ReviewsRepository {
     }
 
     const reviews = await this.prisma.review.findMany({
-      where: { bookId },
+      where: { book_id: bookId },
       include: {
         user: {
           select: {
+            id: true,
             username: true,
             profile: {
               select: {
-                avatarUrl: true,
+                avatar_url: true,
               },
             },
           },
         },
+      },
+      orderBy: {
+        created_at: 'desc',
       },
     });
 
@@ -45,7 +49,15 @@ export class PrismaReviewsRepository implements ReviewsRepository {
 
     try {
       await this.prisma.review.create({
-        data: raw,
+        data: {
+          user_id: raw.user_id,
+          book_id: raw.book_id,
+          recommended: raw.recommended,
+          enjoyed_content: raw.enjoyed_content,
+          enjoyed_narration: raw.enjoyed_narration,
+          title: raw.title,
+          content: raw.content,
+        },
       });
     } catch (error) {
       if (error.code === 'P2002') {

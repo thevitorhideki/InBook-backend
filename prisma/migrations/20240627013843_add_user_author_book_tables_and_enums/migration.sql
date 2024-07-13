@@ -70,7 +70,7 @@ CREATE TABLE "Review" (
     "bookId" INTEGER NOT NULL,
     "recommended" BOOLEAN NOT NULL,
     "enjoyedContent" BOOLEAN NOT NULL,
-    "enjoyedNarrator" BOOLEAN NOT NULL,
+    "enjoyedNarration" BOOLEAN NOT NULL,
     "title" TEXT,
     "content" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

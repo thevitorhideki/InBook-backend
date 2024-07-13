@@ -7,6 +7,7 @@ export class AuthorDetailsDto {
   birthYear?: number;
   nationality?: string;
   books: {
+    id: number;
     title: string;
     pages: number;
     duration: number;
@@ -21,6 +22,7 @@ export class AuthorDetailsDto {
       birthYear: author.birthYear,
       nationality: author.nationality,
       books: author.books.map((book) => ({
+        id: book.id,
         title: book.title,
         pages: book.pages,
         duration: book.duration,

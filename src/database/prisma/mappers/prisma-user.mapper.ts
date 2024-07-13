@@ -15,8 +15,11 @@ export class PrismaUserMapper {
       {
         username: userRaw.username,
         email: userRaw.email,
-        password: userRaw.password,
-        profile: userRaw.profile as Profile,
+        profile: {
+          firstName: userRaw.profile.first_name,
+          lastName: userRaw.profile.last_name,
+          avatarUrl: userRaw.profile.avatar_url,
+        } as Profile,
       },
       userRaw.id,
     );

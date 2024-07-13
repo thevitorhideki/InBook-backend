@@ -1,4 +1,3 @@
-import { clerkClient } from '@clerk/clerk-sdk-node';
 import { Genre } from '@database/enums/genre';
 import {
   Body,
@@ -13,6 +12,7 @@ import {
 } from '@nestjs/common';
 import {
   ApiOperation,
+  ApiParam,
   ApiQuery,
   ApiResponse,
   ApiResponseProperty,
@@ -26,6 +26,7 @@ import { CreateBook } from './services/create-book.service';
 import { DeleteBook } from './services/delete-book.service';
 import { GetBookById } from './services/get-book-by-id.service';
 import { GetBooksByGenre } from './services/get-books-by-genre.service';
+import { GetBooksByRelevance } from './services/get-books-by-relevance.service';
 import { UpdateBook } from './services/update-book.service';
 
 @ApiTags('Books')
@@ -37,7 +38,24 @@ export class BooksController {
     private readonly getBookById: GetBookById,
     private readonly updateBook: UpdateBook,
     private readonly getBooksByGenre: GetBooksByGenre,
+    private readonly getBooksByRelevance: GetBooksByRelevance,
   ) {}
+
+  @Get('relevance')
+  @ApiOperation({ summary: 'Get books by relevance' })
+  @ApiResponse({
+    status: 200,
+    description: 'The books have been successfully retrieved',
+  })
+  @ApiResponseProperty({ type: [BookDetailsDto] })
+  @ApiQuery({ name: 'limit', required: false })
+  async getByRelevance(
+    @Query('limit') limit: string,
+  ): Promise<BookCollectionDto> {
+    return await this.getBooksByRelevance.execute({
+      limit: parseInt(limit),
+    });
+  }
 
   @Get(':bookId')
   @ApiOperation({ summary: 'Get a book by ID' })
@@ -51,21 +69,20 @@ export class BooksController {
   })
   @ApiResponseProperty({ type: BookDetailsDto })
   async getById(@Param('bookId') id: string): Promise<BookDetailsDto> {
-    console.log(await clerkClient.users.getUserList());
     return await this.getBookById.execute({ bookId: parseInt(id) });
   }
 
-  @Get()
+  @Get('genres/:genre')
   @ApiOperation({ summary: 'Get books by genre' })
   @ApiResponse({
     status: 200,
     description: 'The books have been successfully retrieved',
   })
   @ApiResponseProperty({ type: [BookDetailsDto] })
-  @ApiQuery({ name: 'genre', enum: Genre, required: true })
+  @ApiParam({ name: 'genre', enum: Genre, type: String })
   @ApiQuery({ name: 'limit', required: false })
   async getByGenre(
-    @Query('genre') genre: Genre,
+    @Param('genre') genre: Genre,
     @Query('limit') limit: string,
   ): Promise<BookCollectionDto> {
     if (!Object.values(Genre).includes(genre)) {

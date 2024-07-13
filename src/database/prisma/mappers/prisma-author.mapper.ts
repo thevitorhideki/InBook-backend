@@ -5,9 +5,9 @@ export class PrismaAuthorMapper {
   static toPrisma(author: CreateAuthorDto) {
     return {
       name: author.name,
-      avatarUrl: author.avatarUrl,
+      avatar_url: author.avatarUrl,
       about: author.about,
-      birthYear: author.birthYear,
+      birth_year: author.birthYear,
       nationality: author.nationality,
     };
   }

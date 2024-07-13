@@ -1,3 +1,4 @@
+import { Book } from '@database/entities/book';
 import { Injectable } from '@nestjs/common';
 import { BooksRepository } from '../books.repository';
 import { UpdateBookDto } from '../dto/update-book.dto';
@@ -16,6 +17,8 @@ export class UpdateBook {
   async execute(request: IUpdateBookRequest): Promise<IUpdateBookResponse> {
     const { bookId, bookData } = request;
 
-    await this.booksRepository.updateBook(bookId, bookData);
+    const book = new Book(bookData);
+
+    await this.booksRepository.updateBook(bookId, book);
   }
 }

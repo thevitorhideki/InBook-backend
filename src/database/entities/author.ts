@@ -1,4 +1,5 @@
 import { Replace } from '@helpers/Replace';
+import { randomUUID } from 'crypto';
 import { Book } from './book';
 
 export interface IAuthorProps {
@@ -11,18 +12,18 @@ export interface IAuthorProps {
 }
 
 export class Author {
-  private _id: number | undefined;
+  private _id: string | undefined;
   private props: IAuthorProps;
 
-  constructor(props: Replace<IAuthorProps, { books?: Book[] }>, id?: number) {
+  constructor(props: Replace<IAuthorProps, { books?: Book[] }>, id?: string) {
     this.props = {
       ...props,
       books: props.books ?? [],
     };
-    this._id = id;
+    this._id = id ?? randomUUID();
   }
 
-  public get id(): number | undefined {
+  public get id(): string | undefined {
     return this._id;
   }
 

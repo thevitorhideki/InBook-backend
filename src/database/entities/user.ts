@@ -1,5 +1,6 @@
 import { Replace } from '@helpers/Replace';
 import { hashSync } from 'bcrypt';
+import { randomUUID } from 'crypto';
 import { Book } from './book';
 import { Profile } from './profile';
 import { Review } from './review';
@@ -16,13 +17,14 @@ export interface IUserProps {
 }
 
 export class User {
-  private _id: number | undefined;
+  private _id: string | undefined;
   private props: IUserProps;
 
   constructor(
     props: Replace<
       IUserProps,
       {
+        password?: string;
         profile?: Profile;
         reviews?: Review[];
         books?: Book[];
@@ -30,21 +32,21 @@ export class User {
         updatedAt?: Date;
       }
     >,
-    id?: number,
+    id?: string,
   ) {
     this.props = {
       ...props,
-      password: hashSync(props.password, 10),
+      password: props.password ? hashSync(props.password, 10) : null,
       profile: props.profile ?? null,
       reviews: props.reviews ?? [],
       books: props.books ?? [],
       createdAt: props.createdAt ?? new Date(),
       updatedAt: props.updatedAt ?? new Date(),
     };
-    this._id = id;
+    this._id = id ?? randomUUID();
   }
 
-  public get id(): number | undefined {
+  public get id(): string | undefined {
     return this._id;
   }
 

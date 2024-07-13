@@ -3,12 +3,12 @@ import { Language } from '@database/enums/language';
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsEnum,
-  IsInt,
   IsNotEmpty,
   IsNumber,
   IsOptional,
   IsPositive,
   IsString,
+  IsUUID,
 } from 'class-validator';
 
 export class CreateBookDto {
@@ -74,6 +74,6 @@ export class CreateBookDto {
 
   @ApiProperty({ required: true, example: 1 })
   @IsNotEmpty({ message: 'Author ID is required' })
-  @IsInt({ message: 'Author ID must be an integer' })
-  authorId: number;
+  @IsUUID('4', { message: 'Invalid author ID' })
+  authorId: string;
 }

@@ -70,5 +70,5 @@ export class UpdateBookDto {
   @ApiPropertyOptional({ example: 1 })
   @IsInt({ message: 'Author ID must be an integer' })
   @IsOptional()
-  authorId: number | null;
+  authorId: string | null;
 }

@@ -1,3 +1,4 @@
+import { Book } from '@database/entities/book';
 import { Injectable } from '@nestjs/common';
 import { BooksRepository } from '../books.repository';
 import { CreateBookDto } from '../dto/create-book.dto';
@@ -7,6 +8,8 @@ export class CreateBook {
   constructor(private readonly booksRepository: BooksRepository) {}
 
   async execute(request: CreateBookDto): Promise<void> {
-    await this.booksRepository.createBook(request);
+    const book = new Book(request);
+
+    await this.booksRepository.createBook(book);
   }
 }

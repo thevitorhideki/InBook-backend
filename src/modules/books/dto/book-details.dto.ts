@@ -1,31 +1,30 @@
 import { Book } from '@database/entities/book';
-import { Review } from '@database/entities/review';
 import { Genre } from '@database/enums/genre';
 import { Language } from '@database/enums/language';
 import { ReviewDetailsDto } from '@modules/reviews/dto/review-details.dto';
 
 export class BookDetailsDto {
+  id: number;
   title: string;
   description: string;
   genres: Genre[];
   language: Language;
   pages: number;
   duration: number;
-  publicationYear?: number;
+  publicationYear: number;
   coverImageUrl?: string;
-  ebookFileUrl?: string;
-  audiobookFileUrl?: string;
   author: {
-    authorId: number;
+    authorId: string;
     name: string;
-    avatarUrl: string;
     about: string;
+    avatarUrl: string;
+    books: Book[];
   };
   reviews: ReviewDetailsDto[];
-  reviewsCount: number;
 
   static fromEntity(entity: Book): BookDetailsDto {
     const {
+      id,
       title,
       description,
       genres,
@@ -34,13 +33,12 @@ export class BookDetailsDto {
       duration,
       publicationYear,
       coverImageUrl,
-      ebookFileUrl,
-      audiobookFileUrl,
       author,
       reviews,
     } = entity;
 
     return {
+      id,
       title,
       description,
       genres,
@@ -49,26 +47,26 @@ export class BookDetailsDto {
       duration,
       publicationYear,
       coverImageUrl,
-      ebookFileUrl,
-      audiobookFileUrl,
       author: {
         authorId: author.id,
         name: author.name,
         avatarUrl: author.avatarUrl,
         about: author.about,
+        books: author.books,
       },
-      reviews: reviews.map((review: Review) => ({
+      reviews: reviews.map((review) => ({
+        reviewId: review.id,
         recommended: review.recommended,
         enjoyedContent: review.enjoyedContent,
-        enjoyedNarrator: review.enjoyedNarrator,
+        enjoyedNarration: review.enjoyedNarration,
         title: review.title,
         content: review.content,
         user: {
+          id: review.user.id,
           username: review.user.username,
           avatarUrl: review.user.profile.avatarUrl,
         },
       })),
-      reviewsCount: reviews.length,
     };
   }
 }
