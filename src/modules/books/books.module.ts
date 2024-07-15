@@ -6,6 +6,7 @@ import { DeleteBook } from './services/delete-book.service';
 import { GetBookById } from './services/get-book-by-id.service';
 import { GetBooksByGenre } from './services/get-books-by-genre.service';
 import { GetBooksByRelevance } from './services/get-books-by-relevance.service';
+import { GetBooksByTitle } from './services/get-books-by-title.service';
 import { UpdateBook } from './services/update-book.service';
 
 @Module({
@@ -14,6 +15,7 @@ import { UpdateBook } from './services/update-book.service';
     GetBookById,
     GetBooksByGenre,
     GetBooksByRelevance,
+    GetBooksByTitle,
     CreateBook,
     DeleteBook,
     UpdateBook,

@@ -9,6 +9,37 @@ import { PrismaService } from '../prisma.service';
 export class PrismaBooksRepository implements BooksRepository {
   constructor(private readonly prisma: PrismaService) {}
 
+  async getBooksByTitle(title: string): Promise<Book[]> {
+    const books = await this.prisma.book.findMany({
+      where: {
+        title: {
+          contains: title,
+          mode: 'insensitive',
+        },
+      },
+      select: {
+        id: true,
+        title: true,
+        cover_image_url: true,
+        pages: true,
+        duration: true,
+        author: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+      orderBy: {
+        interactions: {
+          _count: 'desc',
+        },
+      },
+    });
+
+    return books.map(PrismaBookMapper.toEntity);
+  }
+
   async getBooksByGenre(genre: Genre, limit?: number): Promise<Book[]> {
     const books = await this.prisma.book.findMany({
       where: {
@@ -20,6 +51,8 @@ export class PrismaBooksRepository implements BooksRepository {
         id: true,
         title: true,
         cover_image_url: true,
+        duration: true,
+        pages: true,
         author: {
           select: {
             id: true,

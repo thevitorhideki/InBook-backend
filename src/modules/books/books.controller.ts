@@ -27,6 +27,7 @@ import { DeleteBook } from './services/delete-book.service';
 import { GetBookById } from './services/get-book-by-id.service';
 import { GetBooksByGenre } from './services/get-books-by-genre.service';
 import { GetBooksByRelevance } from './services/get-books-by-relevance.service';
+import { GetBooksByTitle } from './services/get-books-by-title.service';
 import { UpdateBook } from './services/update-book.service';
 
 @ApiTags('Books')
@@ -39,6 +40,7 @@ export class BooksController {
     private readonly updateBook: UpdateBook,
     private readonly getBooksByGenre: GetBooksByGenre,
     private readonly getBooksByRelevance: GetBooksByRelevance,
+    private readonly getBooksByTitle: GetBooksByTitle,
   ) {}
 
   @Get('relevance')
@@ -55,6 +57,17 @@ export class BooksController {
     return await this.getBooksByRelevance.execute({
       limit: parseInt(limit),
     });
+  }
+
+  @Get('search')
+  @ApiOperation({ summary: 'Get books by title' })
+  @ApiResponse({
+    status: 200,
+    description: 'The books have been successfully retrieved',
+  })
+  @ApiResponseProperty({ type: [BookDetailsDto] })
+  async getByTitle(@Query('title') title: string): Promise<BookCollectionDto> {
+    return await this.getBooksByTitle.execute(title);
   }
 
   @Get(':bookId')
