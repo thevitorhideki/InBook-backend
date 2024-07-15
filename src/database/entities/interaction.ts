@@ -3,41 +3,34 @@ import { InteractionType } from '../enums/interaction';
 import { Book } from './book';
 import { User } from './user';
 
-export interface IUserBookInteractionProps {
-  userId: number;
+export interface IInteractionProps {
+  userId: string;
   user: User;
   bookId: number;
   book: Book;
-  interactionType: InteractionType;
+  type: InteractionType;
 }
 
-export class UserBookInteraction {
-  private _id: number | undefined;
-  private props: IUserBookInteractionProps;
+export class Interaction {
+  private props: IInteractionProps;
 
   constructor(
     props: Replace<
-      IUserBookInteractionProps,
+      IInteractionProps,
       {
         user?: User;
         book?: Book;
       }
     >,
-    id?: number,
   ) {
     this.props = {
       ...props,
       user: props.user ?? null,
       book: props.book ?? null,
     };
-    this._id = id;
   }
 
-  public get id(): number | undefined {
-    return this._id;
-  }
-
-  public get userId(): number {
+  public get userId(): string {
     return this.props.userId;
   }
 
@@ -53,11 +46,11 @@ export class UserBookInteraction {
     return this.props.book;
   }
 
-  public get interactionType(): InteractionType {
-    return this.props.interactionType;
+  public get type(): InteractionType {
+    return this.props.type;
   }
 
-  public set interactionType(interactionType: InteractionType) {
-    this.props.interactionType = interactionType;
+  public set type(type: InteractionType) {
+    this.props.type = type;
   }
 }

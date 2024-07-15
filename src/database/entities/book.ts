@@ -2,8 +2,8 @@ import { Replace } from '@helpers/Replace';
 import { Genre } from '../enums/genre';
 import { Language } from '../enums/language';
 import { Author } from './author';
+import { Interaction } from './interaction';
 import { Review } from './review';
-import { UserBookInteraction } from './user-book-interaction';
 
 export interface IBookProps {
   title: string;
@@ -19,7 +19,7 @@ export interface IBookProps {
   authorId: string;
   author: Author;
   reviews: Review[];
-  interactions: UserBookInteraction[];
+  interactions: Interaction[];
 
   createdAt: Date;
   updatedAt: Date;
@@ -35,7 +35,7 @@ export class Book {
       {
         author?: Author;
         reviews?: Review[];
-        interactions?: UserBookInteraction[];
+        interactions?: Interaction[];
         createdAt?: Date;
         updatedAt?: Date;
       }
@@ -109,7 +109,7 @@ export class Book {
     return this.props.reviews;
   }
 
-  public get interactions(): UserBookInteraction[] {
+  public get interactions(): Interaction[] {
     return this.props.interactions;
   }
 

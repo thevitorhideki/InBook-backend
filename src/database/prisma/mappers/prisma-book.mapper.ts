@@ -1,7 +1,7 @@
 import { Author } from '@database/entities/author';
 import { Book } from '@database/entities/book';
+import { Interaction } from '@database/entities/interaction';
 import { Review } from '@database/entities/review';
-import { UserBookInteraction } from '@database/entities/user-book-interaction';
 import { Genre } from '@database/enums/genre';
 import { Language } from '@database/enums/language';
 
@@ -66,7 +66,7 @@ export class PrismaBookMapper {
             },
           } as Review;
         }),
-        interactions: raw.interactions as UserBookInteraction[],
+        interactions: raw.interactions as Interaction[],
       },
       raw.id,
     );

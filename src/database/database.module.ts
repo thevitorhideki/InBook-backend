@@ -1,5 +1,6 @@
 import { AuthorsRepository } from '@modules/authors/authors.repository';
 import { BooksRepository } from '@modules/books/books.repository';
+import { InteractionsRepository } from '@modules/interactions/interactions.repository';
 import { ProfileRepository } from '@modules/profile/profile.repository';
 import { ReviewsRepository } from '@modules/reviews/reviews.repository';
 import { UsersRepository } from '@modules/users/users.repository';
@@ -7,6 +8,7 @@ import { Module } from '@nestjs/common';
 import { PrismaService } from './prisma/prisma.service';
 import { PrismaAuthorsRepository } from './prisma/repositories/prisma-authors.repository';
 import { PrismaBooksRepository } from './prisma/repositories/prisma-books.repository';
+import { PrismaInteractionsRepository } from './prisma/repositories/prisma-interactions.repository';
 import { PrismaProfileRepository } from './prisma/repositories/prisma-profile.repository';
 import { PrismaReviewsRepository } from './prisma/repositories/prisma-reviews.repository';
 import { PrismaUsersRepository } from './prisma/repositories/prisma-users.repository';
@@ -34,6 +36,10 @@ import { PrismaUsersRepository } from './prisma/repositories/prisma-users.reposi
       provide: ProfileRepository,
       useClass: PrismaProfileRepository,
     },
+    {
+      provide: InteractionsRepository,
+      useClass: PrismaInteractionsRepository,
+    },
   ],
   exports: [
     BooksRepository,
@@ -41,6 +47,7 @@ import { PrismaUsersRepository } from './prisma/repositories/prisma-users.reposi
     ReviewsRepository,
     UsersRepository,
     ProfileRepository,
+    InteractionsRepository,
   ],
 })
 export class DatabaseModule {}

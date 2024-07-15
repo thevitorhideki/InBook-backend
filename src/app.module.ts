@@ -2,6 +2,7 @@ import { DatabaseModule } from '@database/database.module';
 import { AuthModule } from '@modules/auth/auth.module';
 import { AuthorsModule } from '@modules/authors/authors.module';
 import { BooksModule } from '@modules/books/books.module';
+import { InteractionsModule } from '@modules/interactions/interactions.module';
 import { ProfileModule } from '@modules/profile/profile.module';
 import { ReviewsModule } from '@modules/reviews/reviews.module';
 import { UsersModule } from '@modules/users/users.module';
@@ -17,6 +18,7 @@ import { RouterModule } from '@nestjs/core';
     AuthModule,
     UsersModule,
     ProfileModule,
+    InteractionsModule,
     RouterModule.register([
       {
         path: 'books',
