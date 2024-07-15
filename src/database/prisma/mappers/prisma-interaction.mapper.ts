@@ -8,4 +8,12 @@ export class PrismaInteractionMapper {
       interaction_type: interaction.type,
     };
   }
+
+  static toEntity(raw: any): Interaction {
+    return new Interaction({
+      userId: raw.user_id,
+      bookId: raw.book_id,
+      type: raw.interaction_type,
+    });
+  }
 }

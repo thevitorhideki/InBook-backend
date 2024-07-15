@@ -3,6 +3,7 @@ import { JwtAuthGuard } from '@modules/auth/guards/jwt-auth.guard';
 import {
   Controller,
   Delete,
+  Get,
   Param,
   Post,
   Query,
@@ -17,6 +18,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { CreateInteraction } from './services/create-interaction.service';
+import { GetInteractionsByUserAndBook } from './services/get-interactions-by-user-and-book.service';
 import { RemoveInteraction } from './services/remove-interaction.service';
 
 @ApiTags('Interactions')
@@ -26,7 +28,24 @@ export class InteractionsController {
   constructor(
     private readonly createInteraction: CreateInteraction,
     private readonly removeInteraction: RemoveInteraction,
+    private readonly getInteractionsByUserAndBook: GetInteractionsByUserAndBook,
   ) {}
+
+  @Get(':bookId')
+  @ApiOperation({ summary: 'Get interactions by book and user' })
+  @ApiBearerAuth()
+  @ApiResponse({
+    status: 200,
+    description: 'Interactions retrieved successfully',
+  })
+  async get(@Request() req: any, @Param('bookId') bookId: string) {
+    const userId = req.user.userId;
+
+    return await this.getInteractionsByUserAndBook.execute(
+      parseInt(bookId),
+      userId,
+    );
+  }
 
   @Post(':bookId')
   @ApiOperation({ summary: 'Create an interaction' })
