@@ -19,6 +19,7 @@ import {
 } from '@nestjs/swagger';
 import { CreateInteraction } from './services/create-interaction.service';
 import { GetInteractionsByUserAndBook } from './services/get-interactions-by-user-and-book.service';
+import { GetInteractionsByUser } from './services/get-interactionts-by-user.service';
 import { RemoveInteraction } from './services/remove-interaction.service';
 
 @ApiTags('Interactions')
@@ -29,7 +30,21 @@ export class InteractionsController {
     private readonly createInteraction: CreateInteraction,
     private readonly removeInteraction: RemoveInteraction,
     private readonly getInteractionsByUserAndBook: GetInteractionsByUserAndBook,
+    private readonly getInteractionsByUser: GetInteractionsByUser,
   ) {}
+
+  @Get()
+  @ApiOperation({ summary: 'Get interactions by user' })
+  @ApiBearerAuth()
+  @ApiResponse({
+    status: 200,
+    description: 'Interactions retrieved successfully',
+  })
+  async getByUser(@Request() req: any) {
+    const userId = req.user.userId;
+
+    return await this.getInteractionsByUser.execute(userId);
+  }
 
   @Get(':bookId')
   @ApiOperation({ summary: 'Get interactions by book and user' })
@@ -38,7 +53,7 @@ export class InteractionsController {
     status: 200,
     description: 'Interactions retrieved successfully',
   })
-  async get(@Request() req: any, @Param('bookId') bookId: string) {
+  async getByUserAndBook(@Request() req: any, @Param('bookId') bookId: string) {
     const userId = req.user.userId;
 
     return await this.getInteractionsByUserAndBook.execute(

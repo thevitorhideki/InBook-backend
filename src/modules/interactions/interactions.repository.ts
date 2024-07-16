@@ -7,4 +7,5 @@ export abstract class InteractionsRepository {
     bookId: number,
     userId: string,
   ): Promise<Interaction[]>;
+  abstract getInteractionsByUser(userId: string): Promise<Interaction[]>;
 }

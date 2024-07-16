@@ -8,6 +8,37 @@ import { PrismaService } from '../prisma.service';
 export class PrismaInteractionsRepository implements InteractionsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
+  async getInteractionsByUser(userId: string): Promise<Interaction[]> {
+    try {
+      const interactions = await this.prisma.interaction.findMany({
+        where: {
+          user_id: userId,
+        },
+        select: {
+          interaction_type: true,
+          book: {
+            select: {
+              id: true,
+              title: true,
+              cover_image_url: true,
+              duration: true,
+              pages: true,
+              author: {
+                select: {
+                  name: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      return interactions.map(PrismaInteractionMapper.toEntity);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async getInteractionsByUserAndBook(
     bookId: number,
     userId: string,
