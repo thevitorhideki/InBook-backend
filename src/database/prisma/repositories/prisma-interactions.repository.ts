@@ -1,4 +1,5 @@
 import { Interaction } from '@database/entities/interaction';
+import { InteractionType } from '@database/enums/interaction';
 import { InteractionsRepository } from '@modules/interactions/interactions.repository';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaInteractionMapper } from '../mappers/prisma-interaction.mapper';
@@ -42,7 +43,7 @@ export class PrismaInteractionsRepository implements InteractionsRepository {
   async getInteractionsByUserAndBook(
     bookId: number,
     userId: string,
-  ): Promise<Interaction[]> {
+  ): Promise<InteractionType[]> {
     const interactions = await this.prisma.interaction.findMany({
       where: {
         book_id: bookId,
@@ -53,7 +54,7 @@ export class PrismaInteractionsRepository implements InteractionsRepository {
       },
     });
 
-    return interactions.map(PrismaInteractionMapper.toEntity);
+    return interactions.map((i) => InteractionType[i.interaction_type]);
   }
 
   async createInteraction(interaction: Interaction): Promise<void> {

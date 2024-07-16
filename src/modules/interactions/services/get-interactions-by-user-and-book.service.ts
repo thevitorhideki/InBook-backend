@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { GetInteractionsByUserAndBookDto } from '../dto/get-interactions-by-user-and-book.dto';
 import { InteractionsRepository } from '../interactions.repository';
 
 @Injectable()
@@ -8,16 +7,13 @@ export class GetInteractionsByUserAndBook {
     private readonly interactionsRepository: InteractionsRepository,
   ) {}
 
-  async execute(
-    bookId: number,
-    userId: string,
-  ): Promise<GetInteractionsByUserAndBookDto> {
+  async execute(bookId: number, userId: string) {
     const interactions =
       await this.interactionsRepository.getInteractionsByUserAndBook(
         bookId,
         userId,
       );
 
-    return GetInteractionsByUserAndBookDto.fromEntity(interactions);
+    return interactions;
   }
 }
