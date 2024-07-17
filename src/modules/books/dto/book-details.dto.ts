@@ -13,6 +13,7 @@ export class BookDetailsDto {
   duration: number;
   publicationYear: number;
   coverImageUrl?: string;
+  audiobookFileUrl?: string;
   author: {
     authorId: string;
     name: string;
@@ -33,6 +34,7 @@ export class BookDetailsDto {
       duration,
       publicationYear,
       coverImageUrl,
+      audiobookFileUrl,
       author,
       reviews,
     } = entity;
@@ -47,6 +49,7 @@ export class BookDetailsDto {
       duration,
       publicationYear,
       coverImageUrl,
+      audiobookFileUrl,
       author: {
         authorId: author.id,
         name: author.name,

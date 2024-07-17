@@ -109,6 +109,7 @@ export class PrismaBooksRepository implements BooksRepository {
           duration: true,
           publication_year: true,
           cover_image_url: true,
+          audiobook_file_url: true,
           author: {
             select: {
               id: true,
