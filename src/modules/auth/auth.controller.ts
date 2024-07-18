@@ -10,7 +10,6 @@ import { CreateUserDto } from '../users/dto/create-user.dto';
 import { LoginUserDataDto } from './dto/login-user-data.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { LocalAuthGuard } from './guards/local-auth.guard';
-import { RefreshJwtAuthGuard } from './guards/refresh-jwt-auth.guard';
 import { Login } from './services/login.service';
 import { RefreshToken } from './services/refresh-token.service';
 import { Register } from './services/register.service';
@@ -58,7 +57,6 @@ export class AuthController {
     return this.login.execute(req.user);
   }
 
-  @UseGuards(RefreshJwtAuthGuard)
   @Post('refresh')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Refresh a user token' })

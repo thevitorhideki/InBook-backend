@@ -10,7 +10,6 @@ import { Register } from './services/register.service';
 import { ValidateUser } from './services/validate.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
-import { RefreshJwtStrategy } from './strategies/refresh-token.strategy';
 
 @Module({
   imports: [
@@ -29,7 +28,6 @@ import { RefreshJwtStrategy } from './strategies/refresh-token.strategy';
     RefreshToken,
     LocalStrategy,
     JwtStrategy,
-    RefreshJwtStrategy,
   ],
   controllers: [AuthController],
 })
