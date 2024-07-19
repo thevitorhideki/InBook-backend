@@ -12,12 +12,7 @@ export class PrismaProfileRepository {
 
     try {
       await this.prisma.profile.create({
-        data: {
-          user_id: raw.user_id,
-          avatar_url: raw.avatar_url,
-          first_name: raw.first_name,
-          last_name: raw.last_name,
-        },
+        data: raw,
       });
     } catch (err) {
       if (err.code === 'P2002') {
