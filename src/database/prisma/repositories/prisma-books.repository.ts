@@ -158,13 +158,15 @@ export class PrismaBooksRepository implements BooksRepository {
     }
   }
 
-  async createBook(bookData: Book): Promise<void> {
+  async createBook(bookData: Book): Promise<number> {
     const raw = PrismaBookMapper.toPrisma(bookData);
 
     try {
-      await this.prisma.book.create({
+      const book = await this.prisma.book.create({
         data: raw,
       });
+
+      return book.id;
     } catch (error) {
       if (error.code === 'P2003') {
         throw new NotFoundException('Author not found');

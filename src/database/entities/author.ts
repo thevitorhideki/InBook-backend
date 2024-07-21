@@ -16,6 +16,10 @@ export class Author {
   private props: IAuthorProps;
 
   constructor(props: Replace<IAuthorProps, { books?: Book[] }>, id?: string) {
+    if (props.birthYear > new Date().getFullYear()) {
+      throw new Error("The author's birth year cannot be in the future");
+    }
+
     this.props = {
       ...props,
       books: props.books ?? [],

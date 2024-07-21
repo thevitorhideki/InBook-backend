@@ -50,25 +50,25 @@ export class UpdateBookDto {
   @IsNumber({}, { message: 'Publication year must be a number' })
   @IsPositive({ message: 'Publication year must be a positive number' })
   @IsOptional()
-  publicationYear: number | null;
+  publicationYear: number;
 
   @ApiPropertyOptional({ example: 'https://example.com/image.jpg' })
   @IsString({ message: 'Cover image URL must be a string' })
   @IsOptional()
-  coverImageUrl: string | null;
+  coverImageUrl: string;
 
   @ApiPropertyOptional({ example: 'https://example.com/ebook.pdf' })
   @IsString({ message: 'Ebook file URL must be a string' })
   @IsOptional()
-  ebookFileUrl: string | null;
+  ebookFileUrl: string;
 
   @ApiPropertyOptional({ example: 'https://example.com/audiobook.mp3' })
   @IsString({ message: 'Audiobook file URL must be a string' })
   @IsOptional()
-  audiobookFileUrl: string | null;
+  audiobookFileUrl: string;
 
   @ApiPropertyOptional({ example: 1 })
   @IsInt({ message: 'Author ID must be an integer' })
   @IsOptional()
-  authorId: string | null;
+  authorId: string;
 }

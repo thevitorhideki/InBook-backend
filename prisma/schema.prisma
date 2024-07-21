@@ -51,6 +51,7 @@ model Book {
   reviews            Review[]
   interactions       Interaction[]
 
+  @@unique([title, language])
   @@index([author_id])
   @@index([language])
   @@index([genres])

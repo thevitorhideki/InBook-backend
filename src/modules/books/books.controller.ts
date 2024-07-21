@@ -67,7 +67,7 @@ export class BooksController {
   })
   @ApiResponseProperty({ type: [BookDetailsDto] })
   async getByTitle(@Query('title') title: string): Promise<BookCollectionDto> {
-    return await this.getBooksByTitle.execute(title);
+    return await this.getBooksByTitle.execute({ title });
   }
 
   @Get(':bookId')
@@ -119,7 +119,9 @@ export class BooksController {
     description: 'Bad request. Invalid data provided',
   })
   async create(@Body() body: CreateBookDto) {
-    await this.createBook.execute(body);
+    const { bookId } = await this.createBook.execute(body);
+
+    return { bookId };
   }
 
   @Put(':bookId')

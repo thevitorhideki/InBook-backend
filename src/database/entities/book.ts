@@ -42,6 +42,18 @@ export class Book {
     >,
     id?: number,
   ) {
+    if (props.pages <= 0) {
+      throw new Error('Invalid number of pages');
+    }
+
+    if (props.duration <= 0) {
+      throw new Error('Invalid duration value');
+    }
+
+    if (props.publicationYear >= new Date().getFullYear()) {
+      throw new Error('The publication year cannot be in the future');
+    }
+
     this.props = {
       ...props,
       author: props.author ?? null,

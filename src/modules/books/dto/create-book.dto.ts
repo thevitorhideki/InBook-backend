@@ -10,6 +10,7 @@ import {
   IsString,
   IsUUID,
 } from 'class-validator';
+import { randomUUID } from 'crypto';
 
 export class CreateBookDto {
   @ApiProperty({ required: true, example: 'Dracula' })
@@ -72,7 +73,7 @@ export class CreateBookDto {
   @IsOptional()
   audiobookFileUrl?: string | null;
 
-  @ApiProperty({ required: true, example: 1 })
+  @ApiProperty({ required: true, example: randomUUID() })
   @IsNotEmpty({ message: 'Author ID is required' })
   @IsUUID('4', { message: 'Invalid author ID' })
   authorId: string;

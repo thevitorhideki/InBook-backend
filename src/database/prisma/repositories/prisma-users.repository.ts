@@ -63,7 +63,7 @@ export class PrismaUsersRepository implements UsersRepository {
       return PrismaUserMapper.toEntity(user);
     } catch (error) {
       if (error.code === 'P2002' && error.meta?.target?.includes('username')) {
-        throw new BadRequestException('User already exists');
+        throw new BadRequestException('Username already exists');
       } else if (
         error.code === 'P2002' &&
         error.meta?.target?.includes('email')
