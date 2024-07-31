@@ -24,7 +24,7 @@ import { RemoveInteraction } from './services/remove-interaction.service';
 
 @ApiTags('Interactions')
 @UseGuards(JwtAuthGuard)
-@Controller('interactions')
+@Controller()
 export class InteractionsController {
   constructor(
     private readonly createInteraction: CreateInteraction,

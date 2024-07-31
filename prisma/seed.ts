@@ -1,5 +1,4 @@
 import { PrismaClient } from '@prisma/client';
-import { hash } from 'bcrypt';
 
 const prisma = new PrismaClient();
 
@@ -73,26 +72,12 @@ async function main() {
   // Criação de Usuários
   const user1 = await prisma.user.create({
     data: {
+      id: 'user_2jiLzc70PmI0zMm7J4Rl0lGpiRA',
       username: 'johndoe',
       email: 'johndoe@example.com',
-      password: await hash('#StrongPassword1', 10),
       profile: {
         create: {
           first_name: 'John',
-          last_name: 'Doe',
-        },
-      },
-    },
-  });
-
-  const user2 = await prisma.user.create({
-    data: {
-      username: 'janedoe',
-      email: 'janedoe@example.com',
-      password: await hash('#StrongPassword1', 10),
-      profile: {
-        create: {
-          first_name: 'Jane',
           last_name: 'Doe',
         },
       },
@@ -115,18 +100,6 @@ async function main() {
 
   await prisma.review.create({
     data: {
-      user_id: user2.id,
-      book_id: book1.id,
-      recommended: false,
-      enjoyed_content: false,
-      enjoyed_narration: true,
-      title: 'Não gostei muito...',
-      content: 'Não gostei tanto quanto eu achava que ia gostar',
-    },
-  });
-
-  await prisma.review.create({
-    data: {
       user_id: user1.id,
       book_id: book2.id,
       recommended: true,
@@ -143,14 +116,6 @@ async function main() {
     data: {
       user_id: user1.id,
       book_id: book1.id,
-      interaction_type: 'READ',
-    },
-  });
-
-  await prisma.interaction.create({
-    data: {
-      user_id: user2.id,
-      book_id: book2.id,
       interaction_type: 'READ',
     },
   });

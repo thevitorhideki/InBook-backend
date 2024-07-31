@@ -31,12 +31,16 @@ import { RouterModule } from '@nestjs/core';
         ],
       },
       {
-        path: 'account',
+        path: 'users',
         module: UsersModule,
         children: [
           {
-            path: 'profile',
+            path: 'profiles',
             module: ProfileModule,
+          },
+          {
+            path: 'interactions',
+            module: InteractionsModule,
           },
         ],
       },

@@ -3,6 +3,7 @@ import { UsersRepository } from '@modules/users/users.repository';
 import {
   BadRequestException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaUserMapper } from '../mappers/prisma-user.mapper';
@@ -11,6 +12,18 @@ import { PrismaService } from '../prisma.service';
 @Injectable()
 export class PrismaUsersRepository implements UsersRepository {
   constructor(private readonly prisma: PrismaService) {}
+
+  async findByEmail(emailAddress: string): Promise<User> {
+    try {
+      const user = await this.prisma.user.findUnique({
+        where: { email: emailAddress },
+      });
+
+      return PrismaUserMapper.toEntity(user);
+    } catch (error) {
+      throw new NotFoundException('User not found');
+    }
+  }
 
   async findById(userId: string): Promise<any> {
     try {

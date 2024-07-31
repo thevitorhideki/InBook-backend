@@ -4,7 +4,7 @@ import { CreateUserDto } from '../dto/create-user.dto';
 import { UsersRepository } from '../users.repository';
 
 interface ICreateUserResponse {
-  user: User;
+  userId: string;
 }
 
 @Injectable()
@@ -16,6 +16,8 @@ export class CreateUser {
 
     await this.usersRepository.createUser(user);
 
-    return { user };
+    const userId = user.id;
+
+    return { userId };
   }
 }
