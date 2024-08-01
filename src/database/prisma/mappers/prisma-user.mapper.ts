@@ -5,7 +5,6 @@ export class PrismaUserMapper {
   static toPrisma(user: User) {
     return {
       id: user.id,
-      username: user.username,
       email: user.email,
     };
   }
@@ -13,7 +12,6 @@ export class PrismaUserMapper {
   static toEntity(userRaw: any): User {
     return new User({
       id: userRaw.id,
-      username: userRaw.username,
       email: userRaw.email,
       profile: {
         firstName: userRaw.profile?.first_name || undefined,

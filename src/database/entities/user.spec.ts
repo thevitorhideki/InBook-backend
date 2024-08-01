@@ -5,7 +5,6 @@ describe('User', () => {
   it('should be able to create a new User', () => {
     const user = new User({
       id: randomUUID(),
-      username: 'vitorhideki',
       email: 'thevitorhideki@gmail.com',
     });
 

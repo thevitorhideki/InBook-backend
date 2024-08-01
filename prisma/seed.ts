@@ -73,12 +73,12 @@ async function main() {
   const user1 = await prisma.user.create({
     data: {
       id: 'user_2jiLzc70PmI0zMm7J4Rl0lGpiRA',
-      username: 'johndoe',
       email: 'johndoe@example.com',
       profile: {
         create: {
           first_name: 'John',
           last_name: 'Doe',
+          avatar_url: 'https://example.com/profile_photo.jpg',
         },
       },
     },

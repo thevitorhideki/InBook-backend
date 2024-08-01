@@ -9,7 +9,8 @@ export class ReviewDetailsDto {
   content?: string;
   user: {
     id: string;
-    username: string;
+    firstName: string;
+    lastName: string;
     avatarUrl?: string;
   };
 
@@ -23,7 +24,8 @@ export class ReviewDetailsDto {
       content: review.content,
       user: {
         id: review.user.id,
-        username: review.user.username,
+        firstName: review.user.profile.firstName,
+        lastName: review.user.profile.lastName,
         avatarUrl: review.user.profile.avatarUrl,
       },
     };

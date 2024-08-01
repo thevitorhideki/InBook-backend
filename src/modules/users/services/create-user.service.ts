@@ -12,12 +12,15 @@ export class CreateUser {
   constructor(private readonly usersRepository: UsersRepository) {}
 
   async execute(request: CreateUserDto): Promise<ICreateUserResponse> {
-    const user = new User(request);
+    const { id, email } = request;
+
+    const user = new User({
+      id,
+      email,
+    });
 
     await this.usersRepository.createUser(user);
 
-    const userId = user.id;
-
-    return { userId };
+    return { userId: id };
   }
 }

@@ -1,33 +1,29 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-  Req,
-  UseGuards,
-} from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserDetailsDto } from './dto/user-details.dto';
 import { CreateUser } from './services/create-user.service';
+import { GetAllUsers } from './services/get-all-users.service';
 import { GetUserByEmail } from './services/get-user-by-email.service';
-import { GetUserDetails } from './services/get-user-details.service';
 
-@ApiTags('Account')
+@ApiTags('Users')
 @Controller()
 export class UsersController {
   constructor(
-    private readonly getUserDetails: GetUserDetails,
     private readonly getUserByEmail: GetUserByEmail,
     private readonly createUser: CreateUser,
+    private readonly getAllUsers: GetAllUsers,
   ) {}
+
+  @Get()
+  @ApiOperation({ summary: 'Get all users' })
+  @ApiResponse({
+    status: 200,
+    description: 'The users has been successfully retrieved',
+  })
+  async getAll(): Promise<UserDetailsDto[]> {
+    return await this.getAllUsers.execute();
+  }
 
   @Post()
   @ApiOperation({ summary: 'Create user' })
@@ -49,21 +45,5 @@ export class UsersController {
     @Param('emailAddress') emailAddress: string,
   ): Promise<UserDetailsDto> {
     return await this.getUserByEmail.execute({ emailAddress });
-  }
-
-  @Get()
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get user details' })
-  @ApiResponse({
-    status: 200,
-    description: 'The user details have been successfully retrieved',
-  })
-  @ApiResponse({
-    status: 401,
-    description: 'Unauthorized access',
-  })
-  async getUser(@Req() req: any): Promise<UserDetailsDto> {
-    return await this.getUserDetails.execute({ userId: req.user.userId });
   }
 }

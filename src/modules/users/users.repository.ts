@@ -1,7 +1,7 @@
 import { User } from '@database/entities/user';
 
 export abstract class UsersRepository {
-  abstract createUser(userData: User): Promise<User>;
+  abstract getAllUsers(): Promise<User[]>;
+  abstract createUser(userData: User): Promise<void>;
   abstract findByEmail(emailAddress: string): Promise<User>;
-  abstract findById(userId: string): Promise<User>;
 }

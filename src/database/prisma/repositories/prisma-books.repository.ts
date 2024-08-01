@@ -136,9 +136,10 @@ export class PrismaBooksRepository implements BooksRepository {
               user: {
                 select: {
                   id: true,
-                  username: true,
                   profile: {
                     select: {
+                      first_name: true,
+                      last_name: true,
                       avatar_url: true,
                     },
                   },

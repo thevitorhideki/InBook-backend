@@ -5,7 +5,6 @@ import { Review } from './review';
 
 export interface IUserProps {
   id: string;
-  username: string;
   email: string;
   profile: Profile;
   reviews: Review[];
@@ -43,10 +42,6 @@ export class User {
     return this.props.id;
   }
 
-  public get username(): string {
-    return this.props.username;
-  }
-
   public get email(): string {
     return this.props.email;
   }
@@ -69,10 +64,6 @@ export class User {
 
   public get updatedAt(): Date {
     return this.props.updatedAt;
-  }
-
-  public set username(value: string) {
-    this.props.username = value;
   }
 
   public set email(value: string) {

@@ -66,7 +66,8 @@ export class BookDetailsDto {
         content: review.content,
         user: {
           id: review.user.id,
-          username: review.user.username,
+          firstName: review.user.profile.firstName,
+          lastName: review.user.profile.lastName,
           avatarUrl: review.user.profile.avatarUrl,
         },
       })),

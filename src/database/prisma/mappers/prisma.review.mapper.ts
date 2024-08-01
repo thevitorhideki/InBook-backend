@@ -28,8 +28,9 @@ export class PrismaReviewMapper {
         book: review.book as Book,
         user: {
           id: review.user.id,
-          username: review.user.username,
           profile: {
+            firstName: review.user.profile.first_name,
+            lastName: review.user.profile.last_name,
             avatarUrl: review.user.profile.avatar_url,
           },
         } as User,
