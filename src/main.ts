@@ -14,7 +14,6 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter());
 
   const config = new DocumentBuilder()
-    .addBearerAuth()
     .setTitle('InBook')
     .setDescription('The InBook API description')
     .build();

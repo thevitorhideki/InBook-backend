@@ -3,14 +3,12 @@ import { Book } from '@database/entities/book';
 
 export class BookCollectionDto {
   books: {
-    id: number;
+    id: string;
     title: string;
+    slug: string;
     author: {
       name: string;
     };
-    pages: number;
-    duration: number;
-    coverImageUrl?: string;
   }[];
 
   static fromEntity(books: Book[], author?: Author): BookCollectionDto {
@@ -18,12 +16,10 @@ export class BookCollectionDto {
       books: books.map((book) => ({
         id: book.id,
         title: book.title,
+        slug: book.slug,
         author: {
           name: author?.name || book.author.name,
         },
-        pages: book.pages,
-        duration: book.duration,
-        coverImageUrl: book.coverImageUrl,
       })),
     };
   }

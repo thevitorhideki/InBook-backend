@@ -1,12 +1,10 @@
 import { Book } from '@database/entities/book';
-import { Genre } from '@database/enums/genre';
 
 export abstract class BooksRepository {
-  abstract getBookById(id: number): Promise<Book>;
-  abstract getBooksByGenre(genre: Genre, limit?: number): Promise<Book[]>;
-  abstract getBooksByRelevance(limit?: number): Promise<Book[]>;
+  abstract getAllBooks(): Promise<Book[]>;
+  abstract getBookById(id: string): Promise<Book>;
   abstract getBooksByTitle(title: string): Promise<Book[]>;
-  abstract createBook(bookData: Book): Promise<number>;
-  abstract updateBook(id: number, bookData: Book): Promise<void>;
-  abstract deleteBook(id: number): Promise<void>;
+  abstract createBook(bookData: Book): Promise<string>;
+  abstract updateBook(id: string, bookData: Book): Promise<void>;
+  abstract deleteBook(id: string): Promise<void>;
 }

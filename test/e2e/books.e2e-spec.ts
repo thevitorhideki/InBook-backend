@@ -1,5 +1,3 @@
-import { Genre } from '@database/enums/genre';
-import { Language } from '@database/enums/language';
 import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import * as request from 'supertest';
@@ -27,15 +25,7 @@ describe('E2E Books', () => {
       .post('/books')
       .send({
         title: "Harry Potter and the Philosopher's Stone",
-        description: 'First book in the Harry Potter series.',
-        genres: [Genre.ADVENTURE, Genre.CLASSIC],
-        language: Language.ENGLISH,
-        pages: 223,
-        duration: 130, // Example duration in minutes for audiobook
-        publicationYear: 1997,
-        coverImageUrl: 'https://example.com/cover1.jpg',
-        ebookFileUrl: 'https://example.com/ebook1.pdf',
-        audiobookFileUrl: 'https://example.com/audiobook1.mp3',
+        slug: 'harry-potter-and-the-philosophers-stone',
         authorId: 1,
       })
       .expect(201);
@@ -46,15 +36,7 @@ describe('E2E Books', () => {
       .post('/books')
       .send({
         title: "Harry Potter and the Philosopher's Stone",
-        description: 'First book in the Harry Potter series.',
-        genres: [Genre.ADVENTURE, Genre.CLASSIC],
-        language: Language.ENGLISH,
-        pages: 223,
-        duration: 130, // Example duration in minutes for audiobook
-        publicationYear: 1997,
-        coverImageUrl: 'https://example.com/cover1.jpg',
-        ebookFileUrl: 'https://example.com/ebook1.pdf',
-        audiobookFileUrl: 'https://example.com/audiobook1.mp3',
+        slug: 'harry-potter-and-the-philosophers-stone',
         authorId: 0,
       })
       .expect(404);
@@ -78,15 +60,7 @@ describe('E2E Books', () => {
       .put(`/books/${bookId}`)
       .send({
         title: 'Updated Title',
-        description: 'Updated Description',
-        genres: [Genre.ADVENTURE],
-        language: Language.ENGLISH,
-        pages: 1000,
-        duration: 120, // Example duration in minutes for audiobook
-        publicationYear: 1997,
-        coverImageUrl: 'https://example.com/cover1.jpg',
-        ebookFileUrl: 'https://example.com/ebook1.pdf',
-        audiobookFileUrl: 'https://example.com/audiobook1.mp3',
+        slug: 'harry-potter-and-the-philosophers-stone',
         authorId: 1,
       })
       .expect(200);
@@ -97,15 +71,7 @@ describe('E2E Books', () => {
       .put('/books/0')
       .send({
         title: 'Updated Title',
-        description: 'Updated Description',
-        genres: [Genre.ADVENTURE],
-        language: Language.ENGLISH,
-        pages: 1000,
-        duration: 120, // Example duration in minutes for audiobook
-        publicationYear: 1997,
-        coverImageUrl: 'https://example.com/cover1.jpg',
-        ebookFileUrl: 'https://example.com/ebook1.pdf',
-        audiobookFileUrl: 'https://example.com/audiobook1.mp3',
+        slug: 'harry-potter-and-the-philosophers-stone',
         authorId: 1,
       })
       .expect(404);
@@ -117,27 +83,5 @@ describe('E2E Books', () => {
 
   it('should not delete a book with invalid id', async () => {
     await request(app.getHttpServer()).delete('/books/0').expect(404);
-  });
-
-  it('should get books by genre', async () => {
-    const booksReq = await request(app.getHttpServer())
-      .get('/books?genre=ADVENTURE')
-      .expect(200);
-
-    const { books } = booksReq.body;
-
-    expect(books).toBeDefined();
-    expect(books.length).toBeGreaterThan(1);
-  });
-
-  it('should get books by genre with limit', async () => {
-    const booksReq = await request(app.getHttpServer())
-      .get('/books?genre=ADVENTURE&limit=1')
-      .expect(200);
-
-    const { books } = booksReq.body;
-
-    expect(books).toBeDefined();
-    expect(books).toHaveLength(1);
   });
 });

@@ -1,15 +1,5 @@
-import { Genre } from '@database/enums/genre';
-import { Language } from '@database/enums/language';
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsEnum,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsPositive,
-  IsString,
-  IsUUID,
-} from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 import { randomUUID } from 'crypto';
 
 export class CreateBookDto {
@@ -18,63 +8,8 @@ export class CreateBookDto {
   @IsNotEmpty({ message: 'Title is required' })
   title: string;
 
-  @ApiProperty({ required: true, example: 'A vampire story' })
-  @IsString({ message: 'Description must be a string' })
-  @IsNotEmpty({ message: 'Description is required' })
-  description: string;
-
-  @ApiProperty({ type: [String], required: true, enum: Genre })
-  @IsNotEmpty({ message: 'At least one genre is required' })
-  @IsEnum(Genre, { each: true, message: 'Invalid genre' })
-  genres: Genre[];
-
-  @ApiProperty({ required: true, enum: Language })
-  @IsNotEmpty({ message: 'Language is required' })
-  @IsEnum(Language, { message: 'Invalid language' })
-  language: Language;
-
-  @ApiProperty({ required: true, example: 300 })
-  @IsNotEmpty({ message: 'Number of pages is required' })
-  @IsNumber({}, { message: 'Pages must be a number' })
-  @IsPositive({ message: 'Pages must be a positive number' })
-  pages: number;
-
-  @ApiProperty({
-    required: true,
-    example: 180,
-    description: 'Duration in minutes',
-  })
-  @IsNotEmpty({ message: 'Duration is required' })
-  @IsNumber({}, { message: 'Duration must be a number' })
-  @IsPositive({ message: 'Duration must be a positive number' })
-  duration: number;
-
-  @ApiProperty({ required: false, example: 1897 })
-  @IsNumber({}, { message: 'Publication year must be a number' })
-  @IsPositive({ message: 'Publication year must be a positive number' })
-  @IsOptional()
-  publicationYear?: number | null;
-
-  @ApiProperty({ required: false, example: 'https://example.com/image.jpg' })
-  @IsString({ message: 'Cover image URL must be a string' })
-  @IsOptional()
-  coverImageUrl?: string | null;
-
-  @ApiProperty({ required: false, example: 'https://example.com/ebook.pdf' })
-  @IsString({ message: 'Ebook file URL must be a string' })
-  @IsOptional()
-  ebookFileUrl?: string | null;
-
-  @ApiProperty({
-    required: false,
-    example: 'https://example.com/audiobook.mp3',
-  })
-  @IsString({ message: 'Audiobook file URL must be a string' })
-  @IsOptional()
-  audiobookFileUrl?: string | null;
-
   @ApiProperty({ required: true, example: randomUUID() })
   @IsNotEmpty({ message: 'Author ID is required' })
-  @IsUUID('4', { message: 'Invalid author ID' })
+  @IsString({ message: 'Author ID must be a String' })
   authorId: string;
 }

@@ -11,7 +11,10 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthorDetailsDto } from './dto/author-details';
 import { CreateAuthorDto } from './dto/create-author.dto';
 import { UpdateAuthorDto } from './dto/update-author.dto';
-import { CreateAuthor } from './services/create-author.service';
+import {
+  CreateAuthor,
+  CreateAuthorResponse,
+} from './services/create-author.service';
 import { DeleteAuthor } from './services/delete-author.service';
 import { GetAuthorById } from './services/get-author-by-id.service';
 import { UpdateAuthor } from './services/update-author.service';
@@ -52,8 +55,8 @@ export class AuthorsController {
     status: 400,
     description: 'Bad request. Invalid data provided',
   })
-  async create(@Body() body: CreateAuthorDto) {
-    await this.createAuthor.execute(body);
+  async create(@Body() body: CreateAuthorDto): Promise<CreateAuthorResponse> {
+    return await this.createAuthor.execute(body);
   }
 
   @Put(':authorId')

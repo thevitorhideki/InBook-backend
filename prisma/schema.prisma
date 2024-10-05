@@ -7,119 +7,22 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id         String        @id
-  email      String        @unique
-  created_at DateTime      @default(now())
-  updated_at DateTime      @updatedAt
-  profile    Profile?
-  reviews    Review[]
-  books      Interaction[]
-
-  @@map("users")
-}
-
-model Profile {
-  user_id    String  @unique
-  first_name String
-  last_name  String
-  avatar_url String?
-  user       User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
-
-  @@index([user_id])
-  @@map("profiles")
-}
-
 model Book {
-  id                 Int           @id @default(autoincrement())
-  title              String
-  description        String
-  genres             Genre[]
-  language           Language
-  pages              Int
-  duration           Int
-  publication_year   Int?
-  cover_image_url    String?
-  ebook_file_url     String?
-  audiobook_file_url String?
-  author_id          String
-  created_at         DateTime      @default(now())
-  updated_at         DateTime      @updatedAt
-  author             Author        @relation(fields: [author_id], references: [id], onDelete: Cascade)
-  reviews            Review[]
-  interactions       Interaction[]
+  id        String   @id @default(uuid())
+  title     String
+  slug      String   @unique
+  authorId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  author    Author   @relation(fields: [authorId], references: [id])
 
-  @@unique([title, language])
-  @@index([author_id])
-  @@index([language])
-  @@index([genres])
   @@map("books")
 }
 
 model Author {
-  id          String  @id @default(uuid())
-  name        String
-  avatar_url  String?
-  about       String?
-  birth_year  Int?
-  nationality String?
-  books       Book[]
+  id    String @id @default(uuid())
+  name  String @unique
+  books Book[]
 
   @@map("authors")
-}
-
-model Review {
-  id                Int      @id @default(autoincrement())
-  user_id           String
-  book_id           Int
-  recommended       Boolean
-  enjoyed_content   Boolean
-  enjoyed_narration Boolean
-  title             String?
-  content           String?
-  created_at        DateTime @default(now())
-  updated_at        DateTime @updatedAt
-  book              Book     @relation(fields: [book_id], references: [id], onDelete: Cascade)
-  user              User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
-
-  @@unique([user_id, book_id])
-  @@map("reviews")
-}
-
-model Interaction {
-  user_id          String
-  book_id          Int
-  interaction_type InteractionType
-  book             Book            @relation(fields: [book_id], references: [id], onDelete: Cascade)
-  user             User            @relation(fields: [user_id], references: [id], onDelete: Cascade)
-
-  @@unique([user_id, book_id, interaction_type])
-  @@index([user_id])
-  @@index([book_id])
-  @@map("interactions")
-}
-
-enum Language {
-  PORTUGUESE
-  ENGLISH
-}
-
-enum Genre {
-  ROMANCE
-  FANFIC
-  BUSINESS
-  ADVENTURE
-  HORROR
-  RELIGION
-  HISTORY
-  SELF_HELP
-  CLASSIC
-  BIOGRAPHY
-}
-
-enum InteractionType {
-  SAVED
-  DOWNLOADED
-  READING
-  READ
 }

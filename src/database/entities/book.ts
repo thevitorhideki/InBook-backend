@@ -1,32 +1,18 @@
 import { Replace } from '@helpers/Replace';
-import { Genre } from '../enums/genre';
-import { Language } from '../enums/language';
 import { Author } from './author';
-import { Interaction } from './interaction';
-import { Review } from './review';
 
 export interface IBookProps {
   title: string;
-  description: string;
-  genres: Genre[];
-  language: Language;
-  pages: number;
-  duration: number;
-  publicationYear?: number | null;
-  coverImageUrl?: string | null;
-  ebookFileUrl?: string | null;
-  audiobookFileUrl?: string | null;
+  slug: string;
   authorId: string;
   author: Author;
-  reviews: Review[];
-  interactions: Interaction[];
 
   createdAt: Date;
   updatedAt: Date;
 }
 
 export class Book {
-  private _id: number | undefined;
+  private _id: string | undefined;
   private props: IBookProps;
 
   constructor(
@@ -34,38 +20,22 @@ export class Book {
       IBookProps,
       {
         author?: Author;
-        reviews?: Review[];
-        interactions?: Interaction[];
         createdAt?: Date;
         updatedAt?: Date;
       }
     >,
-    id?: number,
+    id?: string,
   ) {
-    if (props.pages <= 0) {
-      throw new Error('Invalid number of pages');
-    }
-
-    if (props.duration <= 0) {
-      throw new Error('Invalid duration value');
-    }
-
-    if (props.publicationYear >= new Date().getFullYear()) {
-      throw new Error('The publication year cannot be in the future');
-    }
-
     this.props = {
       ...props,
       author: props.author ?? null,
-      reviews: props.reviews ?? [],
-      interactions: props.interactions ?? [],
       createdAt: props.createdAt ?? new Date(),
       updatedAt: props.updatedAt ?? new Date(),
     };
     this._id = id;
   }
 
-  public get id(): number | undefined {
+  public get id(): string | undefined {
     return this._id;
   }
 
@@ -73,40 +43,8 @@ export class Book {
     return this.props.title;
   }
 
-  public get description(): string {
-    return this.props.description;
-  }
-
-  public get genres(): Genre[] {
-    return this.props.genres;
-  }
-
-  public get language(): Language {
-    return this.props.language;
-  }
-
-  public get pages(): number {
-    return this.props.pages;
-  }
-
-  public get duration(): number {
-    return this.props.duration;
-  }
-
-  public get publicationYear(): number | null | undefined {
-    return this.props.publicationYear;
-  }
-
-  public get coverImageUrl(): string | null | undefined {
-    return this.props.coverImageUrl;
-  }
-
-  public get ebookFileUrl(): string | null | undefined {
-    return this.props.ebookFileUrl;
-  }
-
-  public get audiobookFileUrl(): string | null | undefined {
-    return this.props.audiobookFileUrl;
+  public get slug(): string {
+    return this.props.slug;
   }
 
   public get authorId(): string {
@@ -116,15 +54,6 @@ export class Book {
   public get author(): Author {
     return this.props.author;
   }
-
-  public get reviews(): Review[] {
-    return this.props.reviews;
-  }
-
-  public get interactions(): Interaction[] {
-    return this.props.interactions;
-  }
-
   public get createdAt(): Date {
     return this.props.createdAt;
   }
@@ -137,44 +66,8 @@ export class Book {
     this.props.title = title;
   }
 
-  public set description(description: string) {
-    this.props.description = description;
-  }
-
-  public set genres(genres: string[]) {
-    const genresEnum: Genre[] = genres.map(
-      (genre) => Genre[genre as keyof typeof Genre],
-    );
-    this.props.genres = genresEnum;
-  }
-
-  public set language(language: string) {
-    const languageEnum: Language = Language[language as keyof typeof Language];
-    this.props.language = languageEnum;
-  }
-
-  public set pages(pages: number) {
-    this.props.pages = pages;
-  }
-
-  public set duration(duration: number) {
-    this.props.duration = duration;
-  }
-
-  public set publicationYear(publicationYear: number | null) {
-    this.props.publicationYear = publicationYear;
-  }
-
-  public set coverImageUrl(coverImageUrl: string | null) {
-    this.props.coverImageUrl = coverImageUrl;
-  }
-
-  public set ebookFileUrl(ebookFileUrl: string | null) {
-    this.props.ebookFileUrl = ebookFileUrl;
-  }
-
-  public set audiobookFileUrl(audiobookFileUrl: string | null) {
-    this.props.audiobookFileUrl = audiobookFileUrl;
+  public set slug(slug: string) {
+    this.props.slug = slug;
   }
 
   public set authorId(authorId: string) {

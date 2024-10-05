@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { BooksRepository } from '../books.repository';
 
 interface IDeleteBookRequest {
-  bookId: number;
+  bookId: string;
 }
 
 type IDeleteBookResponse = void;

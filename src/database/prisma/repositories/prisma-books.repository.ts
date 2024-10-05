@@ -1,5 +1,4 @@
 import { Book } from '@database/entities/book';
-import { Genre } from '@database/enums/genre';
 import { BooksRepository } from '@modules/books/books.repository';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaBookMapper } from '../mappers/prisma-book.mapper';
@@ -8,6 +7,24 @@ import { PrismaService } from '../prisma.service';
 @Injectable()
 export class PrismaBooksRepository implements BooksRepository {
   constructor(private readonly prisma: PrismaService) {}
+
+  async getAllBooks(): Promise<Book[]> {
+    const books = await this.prisma.book.findMany({
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        author: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+
+    return books.map(PrismaBookMapper.toEntity);
+  }
 
   async getBooksByTitle(title: string): Promise<Book[]> {
     const books = await this.prisma.book.findMany({
@@ -20,9 +37,6 @@ export class PrismaBooksRepository implements BooksRepository {
       select: {
         id: true,
         title: true,
-        cover_image_url: true,
-        pages: true,
-        duration: true,
         author: {
           select: {
             id: true,
@@ -30,119 +44,27 @@ export class PrismaBooksRepository implements BooksRepository {
           },
         },
       },
-      orderBy: {
-        interactions: {
-          _count: 'desc',
-        },
-      },
     });
 
     return books.map(PrismaBookMapper.toEntity);
   }
 
-  async getBooksByGenre(genre: Genre, limit?: number): Promise<Book[]> {
-    const books = await this.prisma.book.findMany({
-      where: {
-        genres: {
-          has: genre,
-        },
-      },
-      select: {
-        id: true,
-        title: true,
-        cover_image_url: true,
-        duration: true,
-        pages: true,
-        author: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-      },
-      take: limit || 10,
-      orderBy: {
-        interactions: {
-          _count: 'desc',
-        },
-      },
-    });
-
-    return books.map(PrismaBookMapper.toEntity);
-  }
-
-  async getBooksByRelevance(limit?: number): Promise<any[]> {
-    const books = await this.prisma.book.findMany({
-      select: {
-        id: true,
-        title: true,
-        cover_image_url: true,
-        author: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-      },
-      take: limit || 10,
-      orderBy: {
-        interactions: {
-          _count: 'desc',
-        },
-      },
-    });
-
-    return books.map(PrismaBookMapper.toEntity);
-  }
-
-  async getBookById(id: number): Promise<Book> {
+  async getBookById(id: string): Promise<Book> {
     try {
       const book = await this.prisma.book.findUniqueOrThrow({
         where: { id },
         select: {
           id: true,
           title: true,
-          description: true,
-          genres: true,
-          language: true,
-          pages: true,
-          duration: true,
-          publication_year: true,
-          cover_image_url: true,
-          audiobook_file_url: true,
+          slug: true,
           author: {
             select: {
               id: true,
               name: true,
-              about: true,
-              avatar_url: true,
               books: {
                 select: {
                   id: true,
                   title: true,
-                  cover_image_url: true,
-                },
-              },
-            },
-          },
-          reviews: {
-            select: {
-              id: true,
-              title: true,
-              content: true,
-              recommended: true,
-              enjoyed_content: true,
-              enjoyed_narration: true,
-              user: {
-                select: {
-                  id: true,
-                  profile: {
-                    select: {
-                      first_name: true,
-                      last_name: true,
-                      avatar_url: true,
-                    },
-                  },
                 },
               },
             },
@@ -159,7 +81,7 @@ export class PrismaBooksRepository implements BooksRepository {
     }
   }
 
-  async createBook(bookData: Book): Promise<number> {
+  async createBook(bookData: Book): Promise<string> {
     const raw = PrismaBookMapper.toPrisma(bookData);
 
     try {
@@ -176,7 +98,7 @@ export class PrismaBooksRepository implements BooksRepository {
     }
   }
 
-  async updateBook(id: number, bookData: Book): Promise<void> {
+  async updateBook(id: string, bookData: Book): Promise<void> {
     const raw = PrismaBookMapper.toPrisma(bookData);
 
     try {
@@ -195,7 +117,7 @@ export class PrismaBooksRepository implements BooksRepository {
     }
   }
 
-  async deleteBook(id: number): Promise<void> {
+  async deleteBook(id: string): Promise<void> {
     try {
       await this.prisma.book.delete({
         where: { id },

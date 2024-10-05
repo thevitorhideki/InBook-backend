@@ -15,15 +15,6 @@ describe('Update Book', () => {
       bookId: book.id,
       bookData: {
         title: 'Hello World',
-        description: book.description,
-        genres: book.genres,
-        language: book.language,
-        pages: book.pages,
-        duration: book.duration,
-        publicationYear: book.publicationYear,
-        coverImageUrl: book.coverImageUrl,
-        ebookFileUrl: book.ebookFileUrl,
-        audiobookFileUrl: book.audiobookFileUrl,
         authorId: book.authorId,
       },
     });

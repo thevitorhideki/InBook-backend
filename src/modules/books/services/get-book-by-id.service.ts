@@ -3,7 +3,7 @@ import { BooksRepository } from '../books.repository';
 import { BookDetailsDto } from '../dto/book-details.dto';
 
 interface IGetBookByIdRequest {
-  bookId: number;
+  bookId: string;
 }
 
 @Injectable()

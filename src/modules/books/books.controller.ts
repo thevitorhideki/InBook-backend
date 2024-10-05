@@ -1,10 +1,8 @@
-import { Genre } from '@database/enums/genre';
 import {
   Body,
   Controller,
   Delete,
   Get,
-  HttpException,
   Param,
   Post,
   Put,
@@ -12,8 +10,6 @@ import {
 } from '@nestjs/common';
 import {
   ApiOperation,
-  ApiParam,
-  ApiQuery,
   ApiResponse,
   ApiResponseProperty,
   ApiTags,
@@ -24,39 +20,32 @@ import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 import { CreateBook } from './services/create-book.service';
 import { DeleteBook } from './services/delete-book.service';
+import { GetAllBooks } from './services/get-all-books.service';
 import { GetBookById } from './services/get-book-by-id.service';
-import { GetBooksByGenre } from './services/get-books-by-genre.service';
-import { GetBooksByRelevance } from './services/get-books-by-relevance.service';
 import { GetBooksByTitle } from './services/get-books-by-title.service';
 import { UpdateBook } from './services/update-book.service';
 
 @ApiTags('Books')
-@Controller()
+@Controller('books')
 export class BooksController {
   constructor(
+    private readonly getAllBooks: GetAllBooks,
     private readonly createBook: CreateBook,
     private readonly deleteBook: DeleteBook,
     private readonly getBookById: GetBookById,
     private readonly updateBook: UpdateBook,
-    private readonly getBooksByGenre: GetBooksByGenre,
-    private readonly getBooksByRelevance: GetBooksByRelevance,
     private readonly getBooksByTitle: GetBooksByTitle,
   ) {}
 
-  @Get('relevance')
-  @ApiOperation({ summary: 'Get books by relevance' })
+  @Get()
+  @ApiOperation({ summary: 'Get all books' })
   @ApiResponse({
     status: 200,
     description: 'The books have been successfully retrieved',
   })
-  @ApiResponseProperty({ type: [BookDetailsDto] })
-  @ApiQuery({ name: 'limit', required: false })
-  async getByRelevance(
-    @Query('limit') limit: string,
-  ): Promise<BookCollectionDto> {
-    return await this.getBooksByRelevance.execute({
-      limit: parseInt(limit),
-    });
+  @ApiResponseProperty({ type: [BookCollectionDto] })
+  async getAll(): Promise<BookCollectionDto> {
+    return await this.getAllBooks.execute();
   }
 
   @Get('search')
@@ -82,30 +71,7 @@ export class BooksController {
   })
   @ApiResponseProperty({ type: BookDetailsDto })
   async getById(@Param('bookId') id: string): Promise<BookDetailsDto> {
-    return await this.getBookById.execute({ bookId: parseInt(id) });
-  }
-
-  @Get('genres/:genre')
-  @ApiOperation({ summary: 'Get books by genre' })
-  @ApiResponse({
-    status: 200,
-    description: 'The books have been successfully retrieved',
-  })
-  @ApiResponseProperty({ type: [BookDetailsDto] })
-  @ApiParam({ name: 'genre', enum: Genre, type: String })
-  @ApiQuery({ name: 'limit', required: false })
-  async getByGenre(
-    @Param('genre') genre: Genre,
-    @Query('limit') limit: string,
-  ): Promise<BookCollectionDto> {
-    if (!Object.values(Genre).includes(genre)) {
-      throw new HttpException({ message: 'Invalid genre' }, 400);
-    }
-
-    return await this.getBooksByGenre.execute({
-      genre,
-      limit: parseInt(limit),
-    });
+    return await this.getBookById.execute({ bookId: id });
   }
 
   @Post()
@@ -135,7 +101,7 @@ export class BooksController {
     description: 'The book was not found',
   })
   async update(@Param('bookId') id: string, @Body() body: UpdateBookDto) {
-    await this.updateBook.execute({ bookId: parseInt(id), bookData: body });
+    await this.updateBook.execute({ bookId: id, bookData: body });
   }
 
   @Delete(':bookId')
@@ -149,6 +115,6 @@ export class BooksController {
     description: 'The book was not found',
   })
   async delete(@Param('bookId') id: string) {
-    await this.deleteBook.execute({ bookId: parseInt(id) });
+    await this.deleteBook.execute({ bookId: id });
   }
 }

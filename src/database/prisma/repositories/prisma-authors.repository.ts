@@ -8,9 +8,11 @@ import { PrismaService } from '../prisma.service';
 export class PrismaAuthorsRepository implements AuthorsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createAuthor(authorData: Author): Promise<void> {
+  async createAuthor(authorData: Author): Promise<string> {
     const raw = PrismaAuthorMapper.toPrisma(authorData);
-    await this.prisma.author.create({ data: raw });
+    const author = await this.prisma.author.create({ data: raw });
+
+    return author.id;
   }
 
   async getAuthorById(authorId: string): Promise<Author> {
@@ -22,11 +24,6 @@ export class PrismaAuthorsRepository implements AuthorsRepository {
             select: {
               id: true,
               title: true,
-            },
-            orderBy: {
-              interactions: {
-                _count: 'desc',
-              },
             },
           },
         },
