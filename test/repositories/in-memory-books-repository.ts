@@ -18,6 +18,16 @@ export class InMemoryBooksRepository implements BooksRepository {
     return book;
   }
 
+  async getBookBySlug(slug: string): Promise<Book> {
+    const book = this.books.find((book) => book.slug === slug);
+
+    if (!book) {
+      return null;
+    }
+
+    return book;
+  }
+
   async getBooksByTitle(title: string): Promise<Book[]> {
     const books = this.books.filter((book) => book.title.includes(title));
 

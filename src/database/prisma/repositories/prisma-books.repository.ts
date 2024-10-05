@@ -49,6 +49,38 @@ export class PrismaBooksRepository implements BooksRepository {
     return books.map(PrismaBookMapper.toEntity);
   }
 
+  async getBookBySlug(slug: string): Promise<Book> {
+    try {
+      const book = await this.prisma.book.findUniqueOrThrow({
+        where: { slug },
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          author: {
+            select: {
+              id: true,
+              name: true,
+              books: {
+                select: {
+                  id: true,
+                  title: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      return PrismaBookMapper.toEntity(book);
+    } catch (error) {
+      if (error.code === 'P2025') {
+        throw new NotFoundException('Book not found');
+      }
+      throw error;
+    }
+  }
+
   async getBookById(id: string): Promise<Book> {
     try {
       const book = await this.prisma.book.findUniqueOrThrow({

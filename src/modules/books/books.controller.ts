@@ -22,6 +22,7 @@ import { CreateBook } from './services/create-book.service';
 import { DeleteBook } from './services/delete-book.service';
 import { GetAllBooks } from './services/get-all-books.service';
 import { GetBookById } from './services/get-book-by-id.service';
+import { GetBookBySlug } from './services/get-book-by-slug.service';
 import { GetBooksByTitle } from './services/get-books-by-title.service';
 import { UpdateBook } from './services/update-book.service';
 
@@ -33,6 +34,7 @@ export class BooksController {
     private readonly createBook: CreateBook,
     private readonly deleteBook: DeleteBook,
     private readonly getBookById: GetBookById,
+    private readonly getBookBySlug: GetBookBySlug,
     private readonly updateBook: UpdateBook,
     private readonly getBooksByTitle: GetBooksByTitle,
   ) {}
@@ -57,6 +59,21 @@ export class BooksController {
   @ApiResponseProperty({ type: [BookDetailsDto] })
   async getByTitle(@Query('title') title: string): Promise<BookCollectionDto> {
     return await this.getBooksByTitle.execute({ title });
+  }
+
+  @Get('slug/:slug')
+  @ApiOperation({ summary: 'Get a book by slug' })
+  @ApiResponse({
+    status: 200,
+    description: 'The book has been successfully retrieved',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'The book was not found',
+  })
+  @ApiResponseProperty({ type: BookDetailsDto })
+  async getBySlug(@Param('slug') slug: string): Promise<BookDetailsDto> {
+    return await this.getBookBySlug.execute({ slug });
   }
 
   @Get(':bookId')
