@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthorDetailsDto } from './dto/author-details';
@@ -17,6 +18,7 @@ import {
 } from './services/create-author.service';
 import { DeleteAuthor } from './services/delete-author.service';
 import { GetAuthorById } from './services/get-author-by-id.service';
+import { GetAuthorsByName } from './services/get-authors-by-name.service';
 import { UpdateAuthor } from './services/update-author.service';
 
 @ApiTags('Authors')
@@ -25,9 +27,22 @@ export class AuthorsController {
   constructor(
     private readonly createAuthor: CreateAuthor,
     private readonly getAuthorById: GetAuthorById,
+    private readonly getAuthorsByName: GetAuthorsByName,
     private readonly deleteAuthor: DeleteAuthor,
     private readonly updateAuthor: UpdateAuthor,
   ) {}
+
+  @Get()
+  @ApiOperation({ summary: 'Filter authors by name' })
+  @ApiResponse({
+    status: 200,
+    description: 'The authors has been successfully retrieved',
+  })
+  async getAuthors(@Query('name') name: string): Promise<any> {
+    const authors = await this.getAuthorsByName.execute({ name });
+
+    return authors;
+  }
 
   @Get(':authorId')
   @ApiOperation({ summary: 'Get an author by id' })

@@ -1,5 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsInt, IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
+import { randomUUID } from 'node:crypto';
 
 export class UpdateBookDto {
   @ApiPropertyOptional({ example: 'Dracula' })
@@ -7,8 +8,8 @@ export class UpdateBookDto {
   @IsOptional()
   title: string;
 
-  @ApiPropertyOptional({ example: 1 })
-  @IsInt({ message: 'Author ID must be an integer' })
+  @ApiPropertyOptional({ example: randomUUID() })
+  @IsString({ message: 'Author ID must be a string' })
   @IsOptional()
   authorId: string;
 }

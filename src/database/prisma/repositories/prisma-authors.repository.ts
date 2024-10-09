@@ -38,6 +38,23 @@ export class PrismaAuthorsRepository implements AuthorsRepository {
     }
   }
 
+  async getAuthorsByName(name: string): Promise<any> {
+    const authors = await this.prisma.author.findMany({
+      where: {
+        name: {
+          contains: name,
+          mode: 'insensitive',
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+      },
+    });
+
+    return authors;
+  }
+
   async updateAuthor(authorId: string, authorData: Author): Promise<void> {
     const raw = PrismaAuthorMapper.toPrisma(authorData);
 
