@@ -15,17 +15,30 @@ export class PrismaAuthorsRepository implements AuthorsRepository {
     return author.id;
   }
 
+  async getAuthors(): Promise<Author> {
+    const authors = await this.prisma.author.findMany({
+      select: {
+        id: true,
+        name: true,
+        books: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    return PrismaAuthorMapper.toEntity(authors);
+  }
+
   async getAuthorById(authorId: string): Promise<Author> {
     try {
       const author = await this.prisma.author.findUniqueOrThrow({
         where: { id: authorId },
-        include: {
-          books: {
-            select: {
-              id: true,
-              title: true,
-            },
-          },
+        select: {
+          id: true,
+          name: true,
+          books: true,
+          createdAt: true,
+          updatedAt: true,
         },
       });
 
@@ -49,6 +62,9 @@ export class PrismaAuthorsRepository implements AuthorsRepository {
       select: {
         id: true,
         name: true,
+        books: true,
+        createdAt: true,
+        updatedAt: true,
       },
     });
 

@@ -8,7 +8,7 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthorDetailsDto } from './dto/author-details';
 import { CreateAuthorDto } from './dto/create-author.dto';
 import { UpdateAuthorDto } from './dto/update-author.dto';
@@ -19,6 +19,7 @@ import {
 import { DeleteAuthor } from './services/delete-author.service';
 import { GetAuthorById } from './services/get-author-by-id.service';
 import { GetAuthorsByName } from './services/get-authors-by-name.service';
+import { GetAuthors } from './services/get-authors.service';
 import { UpdateAuthor } from './services/update-author.service';
 
 @ApiTags('Authors')
@@ -26,6 +27,7 @@ import { UpdateAuthor } from './services/update-author.service';
 export class AuthorsController {
   constructor(
     private readonly createAuthor: CreateAuthor,
+    private readonly getAuthors: GetAuthors,
     private readonly getAuthorById: GetAuthorById,
     private readonly getAuthorsByName: GetAuthorsByName,
     private readonly deleteAuthor: DeleteAuthor,
@@ -33,15 +35,23 @@ export class AuthorsController {
   ) {}
 
   @Get()
-  @ApiOperation({ summary: 'Filter authors by name' })
+  @ApiOperation({ summary: 'Get Authors' })
   @ApiResponse({
     status: 200,
     description: 'The authors has been successfully retrieved',
   })
-  async getAuthors(@Query('name') name: string): Promise<any> {
-    const authors = await this.getAuthorsByName.execute({ name });
+  @ApiQuery({
+    name: 'name',
+    required: false, // Definindo como não obrigatório
+    description: 'The name of the author to search for',
+    type: String,
+  })
+  async fetchAutors(@Query('name') name?: string): Promise<any> {
+    if (name) {
+      return await this.getAuthorsByName.execute({ name });
+    }
 
-    return authors;
+    return await this.getAuthors.execute();
   }
 
   @Get(':authorId')

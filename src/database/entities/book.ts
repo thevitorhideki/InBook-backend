@@ -4,8 +4,7 @@ import { Author } from './author';
 export interface IBookProps {
   title: string;
   slug: string;
-  authorId: string;
-  author: Author;
+  authors: Author[];
 
   createdAt: Date;
   updatedAt: Date;
@@ -19,7 +18,7 @@ export class Book {
     props: Replace<
       IBookProps,
       {
-        author?: Author;
+        authors?: Author[];
         createdAt?: Date;
         updatedAt?: Date;
       }
@@ -28,11 +27,30 @@ export class Book {
   ) {
     this.props = {
       ...props,
-      author: props.author ?? null,
+      authors: props.authors ?? [],
       createdAt: props.createdAt ?? new Date(),
       updatedAt: props.updatedAt ?? new Date(),
     };
     this._id = id;
+  }
+
+  // Adiciona um autor ao livro
+  public addAuthor(author: Author): void {
+    // Evita duplicatas
+    if (!this.props.authors.find((a) => a.id === author.id)) {
+      this.props.authors.push(author);
+      // Adiciona o livro ao autor, se ainda não estiver presente
+      if (!author.books.find((b) => b.id === this.id)) {
+        author.addBook(this);
+      }
+    }
+  }
+
+  // Remove um autor do livro
+  public removeAuthor(authorId: string): void {
+    this.props.authors = this.props.authors.filter(
+      (author) => author.id !== authorId,
+    );
   }
 
   public get id(): string | undefined {
@@ -47,12 +65,8 @@ export class Book {
     return this.props.slug;
   }
 
-  public get authorId(): string {
-    return this.props.authorId;
-  }
-
-  public get author(): Author {
-    return this.props.author;
+  public get authors(): Author[] {
+    return this.props.authors;
   }
   public get createdAt(): Date {
     return this.props.createdAt;
@@ -68,10 +82,6 @@ export class Book {
 
   public set slug(slug: string) {
     this.props.slug = slug;
-  }
-
-  public set authorId(authorId: string) {
-    this.props.authorId = authorId;
   }
 
   public set updatedAt(updatedAt: Date) {

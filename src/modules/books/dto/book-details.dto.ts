@@ -4,24 +4,26 @@ export class BookDetailsDto {
   id: string;
   title: string;
   slug: string;
-  author: {
+  authors: {
     authorId: string;
     name: string;
     books: Book[];
-  };
+  }[];
 
   static fromEntity(entity: Book): BookDetailsDto {
-    const { id, title, slug, author } = entity;
+    const { id, title, slug, authors } = entity;
 
     return {
       id,
       title,
       slug,
-      author: {
-        authorId: author.id,
-        name: author.name,
-        books: author.books,
-      },
+      authors: authors.map((author) => {
+        return {
+          authorId: author.id,
+          name: author.name,
+          books: author.books,
+        };
+      }),
     };
   }
 }

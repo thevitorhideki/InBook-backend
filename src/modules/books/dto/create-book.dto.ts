@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsArray, IsNotEmpty, IsString } from 'class-validator';
 import { randomUUID } from 'crypto';
 
 export class CreateBookDto {
@@ -8,8 +8,8 @@ export class CreateBookDto {
   @IsNotEmpty({ message: 'Title is required' })
   title: string;
 
-  @ApiProperty({ required: true, example: randomUUID() })
+  @ApiProperty({ required: true, example: [randomUUID(), randomUUID()] })
   @IsNotEmpty({ message: 'Author ID is required' })
-  @IsString({ message: 'Author ID must be a String' })
-  authorId: string;
+  @IsArray({ message: 'Author ID must be an Array' })
+  authorIds: string[];
 }

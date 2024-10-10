@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import {
   ApiOperation,
+  ApiQuery,
   ApiResponse,
   ApiResponseProperty,
   ApiTags,
@@ -43,20 +44,18 @@ export class BooksController {
     status: 200,
     description: 'The books have been successfully retrieved',
   })
-  @ApiResponseProperty({ type: [BookCollectionDto] })
-  async getAll(): Promise<BookCollectionDto> {
-    return await this.getAllBooks.execute();
-  }
-
-  @Get('search')
-  @ApiOperation({ summary: 'Get books by title' })
-  @ApiResponse({
-    status: 200,
-    description: 'The books have been successfully retrieved',
+  @ApiQuery({
+    name: 'title',
+    required: false, // Definindo como não obrigatório
+    description: 'The name of the book to search for',
+    type: String,
   })
-  @ApiResponseProperty({ type: [BookDetailsDto] })
-  async getByTitle(@Query('title') title: string): Promise<BookCollectionDto> {
-    return await this.getBooksByTitle.execute({ title });
+  @ApiResponseProperty({ type: [BookCollectionDto] })
+  async getAll(@Query('title') title?: string): Promise<BookCollectionDto> {
+    if (title) {
+      return await this.getBooksByTitle.execute({ title });
+    }
+    return await this.getAllBooks.execute();
   }
 
   @Get(':bookId')

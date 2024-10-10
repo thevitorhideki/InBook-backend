@@ -1,4 +1,3 @@
-import { Author } from '@database/entities/author';
 import { Book } from '@database/entities/book';
 
 export class PrismaBookMapper {
@@ -6,7 +5,7 @@ export class PrismaBookMapper {
     return {
       title: book.title,
       slug: book.slug,
-      authorId: book.authorId,
+      authors: book.authors,
     };
   }
 
@@ -15,17 +14,18 @@ export class PrismaBookMapper {
       {
         title: raw.title,
         slug: raw.slug,
-        authorId: raw.authorId,
-        author: {
-          id: raw.author.id,
-          name: raw.author.name,
-          books: raw.author.books?.map((book) => {
-            return {
-              id: book.id,
-              title: book.title,
-            } as Book;
-          }),
-        } as Author,
+        authors: raw.authors.map((author) => {
+          return {
+            id: author.id,
+            name: author.name,
+            books: author.books?.map((book) => {
+              return {
+                id: book.id,
+                title: book.title,
+              } as Book;
+            }),
+          };
+        }),
       },
       raw.id,
     );

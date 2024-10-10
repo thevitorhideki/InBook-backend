@@ -2,7 +2,7 @@ import { Author } from '@database/entities/author';
 
 export class AuthorDetailsDto {
   name: string;
-  books: {
+  books?: {
     id: string;
     title: string;
     slug: string;
@@ -11,7 +11,7 @@ export class AuthorDetailsDto {
   static fromEntity(author: Author): AuthorDetailsDto {
     return {
       name: author.name,
-      books: author.books.map((book) => ({
+      books: author.books?.map((book) => ({
         id: book.id,
         title: book.title,
         slug: book.slug,
