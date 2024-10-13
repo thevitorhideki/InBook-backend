@@ -6,9 +6,9 @@ import { AuthorDetailsDto } from '../dto/author-details';
 export class GetAuthors {
   constructor(private readonly authorsRepository: AuthorsRepository) {}
 
-  async execute(): Promise<AuthorDetailsDto> {
+  async execute(): Promise<AuthorDetailsDto[]> {
     const authors = await this.authorsRepository.getAuthors();
 
-    return AuthorDetailsDto.fromEntity(authors);
+    return authors.map(AuthorDetailsDto.fromEntity);
   }
 }

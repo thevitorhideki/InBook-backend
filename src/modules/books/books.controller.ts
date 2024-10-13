@@ -15,7 +15,6 @@ import {
   ApiResponseProperty,
   ApiTags,
 } from '@nestjs/swagger';
-import { BookCollectionDto } from './dto/book-collection.dto';
 import { BookDetailsDto } from './dto/book-details.dto';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
@@ -50,8 +49,8 @@ export class BooksController {
     description: 'The name of the book to search for',
     type: String,
   })
-  @ApiResponseProperty({ type: [BookCollectionDto] })
-  async getAll(@Query('title') title?: string): Promise<BookCollectionDto> {
+  @ApiResponseProperty({ type: [BookDetailsDto] })
+  async getAll(@Query('title') title?: string): Promise<BookDetailsDto[]> {
     if (title) {
       return await this.getBooksByTitle.execute({ title });
     }

@@ -9,9 +9,11 @@ export class BookDetailsDto {
     name: string;
     books: Book[];
   }[];
+  createdAt: Date;
+  updatedAt: Date;
 
-  static fromEntity(entity: Book): BookDetailsDto {
-    const { id, title, slug, authors } = entity;
+  static fromEntity(book: Book): BookDetailsDto {
+    const { id, title, slug, authors, createdAt, updatedAt } = book;
 
     return {
       id,
@@ -24,6 +26,8 @@ export class BookDetailsDto {
           books: author.books,
         };
       }),
+      createdAt,
+      updatedAt,
     };
   }
 }

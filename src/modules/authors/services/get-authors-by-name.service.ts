@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { AuthorsRepository } from '../authors.repository';
+import { AuthorDetailsDto } from '../dto/author-details';
 
 interface GetAuthorsByNameRequest {
   name: string;
@@ -21,6 +22,6 @@ export class GetAuthorsByName {
 
     const authors = await this.authorsRepository.getAuthorsByName(name);
 
-    return authors;
+    return authors.map(AuthorDetailsDto.fromEntity);
   }
 }

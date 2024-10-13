@@ -8,14 +8,7 @@ import { PrismaService } from '../prisma.service';
 export class PrismaAuthorsRepository implements AuthorsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createAuthor(authorData: Author): Promise<string> {
-    const raw = PrismaAuthorMapper.toPrisma(authorData);
-    const author = await this.prisma.author.create({ data: raw });
-
-    return author.id;
-  }
-
-  async getAuthors(): Promise<Author> {
+  async getAuthors(): Promise<Author[]> {
     const authors = await this.prisma.author.findMany({
       select: {
         id: true,
@@ -26,7 +19,7 @@ export class PrismaAuthorsRepository implements AuthorsRepository {
       },
     });
 
-    return PrismaAuthorMapper.toEntity(authors);
+    return authors.map(PrismaAuthorMapper.toEntity);
   }
 
   async getAuthorById(authorId: string): Promise<Author> {
@@ -68,7 +61,14 @@ export class PrismaAuthorsRepository implements AuthorsRepository {
       },
     });
 
-    return authors;
+    return authors.map(PrismaAuthorMapper.toEntity);
+  }
+
+  async createAuthor(authorData: Author): Promise<string> {
+    const raw = PrismaAuthorMapper.toPrisma(authorData);
+    const author = await this.prisma.author.create({ data: raw });
+
+    return author.id;
   }
 
   async updateAuthor(authorId: string, authorData: Author): Promise<void> {

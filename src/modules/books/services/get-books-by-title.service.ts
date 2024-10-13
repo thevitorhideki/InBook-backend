@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { BooksRepository } from '../books.repository';
-import { BookCollectionDto } from '../dto/book-collection.dto';
+import { BookDetailsDto } from '../dto/book-details.dto';
 
 interface GetBooksByTitleRequest {
   title: string;
@@ -10,11 +10,11 @@ interface GetBooksByTitleRequest {
 export class GetBooksByTitle {
   constructor(private readonly booksRepository: BooksRepository) {}
 
-  async execute(request: GetBooksByTitleRequest): Promise<BookCollectionDto> {
+  async execute(request: GetBooksByTitleRequest): Promise<BookDetailsDto[]> {
     const { title } = request;
 
     const books = await this.booksRepository.getBooksByTitle(title);
 
-    return BookCollectionDto.fromEntity(books);
+    return books.map(BookDetailsDto.fromEntity);
   }
 }

@@ -55,6 +55,14 @@ export class Author {
     return this.props.books;
   }
 
+  public get createdAt(): Date {
+    return this.props.createdAt;
+  }
+
+  public get updatedAt(): Date {
+    return this.props.updatedAt;
+  }
+
   public set name(name: string) {
     this.props.name = name;
   }

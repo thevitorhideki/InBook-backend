@@ -36,6 +36,7 @@ export class PrismaBooksRepository implements BooksRepository {
       select: {
         id: true,
         title: true,
+        slug: true,
         authors: true,
       },
     });
@@ -47,7 +48,12 @@ export class PrismaBooksRepository implements BooksRepository {
     try {
       const book = await this.prisma.book.findUniqueOrThrow({
         where: { id },
-        include: { authors: true },
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          authors: true,
+        },
       });
 
       return PrismaBookMapper.toEntity(book);
