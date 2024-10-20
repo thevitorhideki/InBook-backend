@@ -31,7 +31,6 @@ import { GetBooksByTitle } from './services/get-books-by-title.service';
 import { UpdateBook } from './services/update-book.service';
 
 @ApiTags('Books')
-@UseGuards(JwtAuthGuard, AdminGuard)
 @Controller('books')
 export class BooksController {
   constructor(
@@ -80,6 +79,7 @@ export class BooksController {
 
   @Post()
   @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, AdminGuard)
   @Admin()
   @ApiOperation({ summary: 'Create a new book' })
   @ApiResponse({
@@ -98,6 +98,7 @@ export class BooksController {
 
   @Put(':bookId')
   @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, AdminGuard)
   @Admin()
   @ApiOperation({ summary: 'Update a book by ID' })
   @ApiResponse({
@@ -114,6 +115,7 @@ export class BooksController {
 
   @Delete(':bookId')
   @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, AdminGuard)
   @Admin()
   @ApiOperation({ summary: 'Delete a book by ID' })
   @ApiResponse({

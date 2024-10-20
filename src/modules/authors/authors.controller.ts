@@ -33,7 +33,6 @@ import { GetAuthors } from './services/get-authors.service';
 import { UpdateAuthor } from './services/update-author.service';
 
 @ApiTags('Authors')
-@UseGuards(JwtAuthGuard, AdminGuard)
 @Controller('authors')
 export class AuthorsController {
   constructor(
@@ -83,6 +82,7 @@ export class AuthorsController {
 
   @Post()
   @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, AdminGuard)
   @Admin()
   @ApiOperation({ summary: 'Create a new author' })
   @ApiResponse({
@@ -99,6 +99,7 @@ export class AuthorsController {
 
   @Put(':authorId')
   @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, AdminGuard)
   @Admin()
   @ApiOperation({ summary: 'Update an author by id' })
   @ApiResponse({
@@ -118,6 +119,7 @@ export class AuthorsController {
 
   @Delete(':authorId')
   @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, AdminGuard)
   @Admin()
   @ApiOperation({ summary: 'Delete an author by id' })
   @ApiResponse({
