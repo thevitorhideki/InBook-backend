@@ -1,3 +1,6 @@
+import { Admin } from '@modules/auth/decorators/admin.decorator';
+import { AdminGuard } from '@modules/auth/guards/admin.guard';
+import { JwtAuthGuard } from '@modules/auth/guards/jwt-auth.guard';
 import {
   Body,
   Controller,
@@ -7,8 +10,10 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiOperation,
   ApiQuery,
   ApiResponse,
@@ -26,6 +31,7 @@ import { GetBooksByTitle } from './services/get-books-by-title.service';
 import { UpdateBook } from './services/update-book.service';
 
 @ApiTags('Books')
+@UseGuards(JwtAuthGuard, AdminGuard)
 @Controller('books')
 export class BooksController {
   constructor(
@@ -73,6 +79,8 @@ export class BooksController {
   }
 
   @Post()
+  @ApiBearerAuth()
+  @Admin()
   @ApiOperation({ summary: 'Create a new book' })
   @ApiResponse({
     status: 201,
@@ -89,6 +97,8 @@ export class BooksController {
   }
 
   @Put(':bookId')
+  @ApiBearerAuth()
+  @Admin()
   @ApiOperation({ summary: 'Update a book by ID' })
   @ApiResponse({
     status: 200,
@@ -103,6 +113,8 @@ export class BooksController {
   }
 
   @Delete(':bookId')
+  @ApiBearerAuth()
+  @Admin()
   @ApiOperation({ summary: 'Delete a book by ID' })
   @ApiResponse({
     status: 200,

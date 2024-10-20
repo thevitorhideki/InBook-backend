@@ -1,3 +1,6 @@
+import { Admin } from '@modules/auth/decorators/admin.decorator';
+import { AdminGuard } from '@modules/auth/guards/admin.guard';
+import { JwtAuthGuard } from '@modules/auth/guards/jwt-auth.guard';
 import {
   Body,
   Controller,
@@ -7,8 +10,15 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { AuthorDetailsDto } from './dto/author-details';
 import { CreateAuthorDto } from './dto/create-author.dto';
 import { UpdateAuthorDto } from './dto/update-author.dto';
@@ -23,6 +33,7 @@ import { GetAuthors } from './services/get-authors.service';
 import { UpdateAuthor } from './services/update-author.service';
 
 @ApiTags('Authors')
+@UseGuards(JwtAuthGuard, AdminGuard)
 @Controller('authors')
 export class AuthorsController {
   constructor(
@@ -71,6 +82,8 @@ export class AuthorsController {
   }
 
   @Post()
+  @ApiBearerAuth()
+  @Admin()
   @ApiOperation({ summary: 'Create a new author' })
   @ApiResponse({
     status: 201,
@@ -85,6 +98,8 @@ export class AuthorsController {
   }
 
   @Put(':authorId')
+  @ApiBearerAuth()
+  @Admin()
   @ApiOperation({ summary: 'Update an author by id' })
   @ApiResponse({
     status: 200,
@@ -102,6 +117,8 @@ export class AuthorsController {
   }
 
   @Delete(':authorId')
+  @ApiBearerAuth()
+  @Admin()
   @ApiOperation({ summary: 'Delete an author by id' })
   @ApiResponse({
     status: 200,
